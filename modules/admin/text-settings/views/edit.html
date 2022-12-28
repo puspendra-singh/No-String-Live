@@ -1,0 +1,76 @@
+<div class="row small-spacing">
+  <div class="col-md-12 col-xs-12">
+    <div class="box-content">
+      <h4 class="box-title"><%= __("admin.system.edit")%></h4>
+      <div class="dropdown js__drop_down">
+        <a href="/admin/text_settings/<%=key%>">
+          <button type="button" class="btn btn-sm btn-violet">
+            <i class="ico ico-left fa fa-step-backward"></i><%=
+            __("admin.system.back")%>
+          </button>
+        </a>
+      </div>
+      <hr />
+      <div class="card-content">
+        <form
+          id="edit-text-setting"
+          method="post"
+          name="edit_text_setting"
+          data-submit-btn-id="edit-btn-text-setting"
+        >
+          <div class="form-group">
+            <label for="key"><%= __('admin.system.key')%></label>
+            <input
+              type="text"
+              name="key"
+              class="form-control"
+              value="<%= result.key%>"
+              id="key"
+              readonly="readonly"
+            />
+            <span class="error" id="key_error"></span>
+          </div>
+          <div class="form-group">
+            <label for="name"><%= __('admin.system.value')%></label>
+            <input
+              type="text"
+              name="value"
+              class="form-control"
+              value="<%= result.value%>"
+              id="value"
+            />
+            <span class="error" id="value_error"></span>
+          </div>
+          <button
+            type="button"
+            id="edit-btn-text-setting"
+            class="btn btn-success btn-sm btn-submit"
+          >
+            <%= __('admin.system.submit')%><span></span>
+          </button>
+          <a
+            href="/admin/text_settings/<%=key%>"
+            type="button"
+            class="btn btn-danger btn-sm"
+            ><%= __('admin.system.cancel')%></a
+          >
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="<%=WEBSITE_JS_FILE_PATH%>scripts/jquery-3.0.0.js"></script>
+<script>
+  $(".btn-submit").click(function () {
+    var btnId = $(this).attr("id");
+    startTextLoading(btnId);
+    ajax_submit("edit-text-setting", function (status, response) {
+      if (status) {
+        window.location.href = response.rediect_url;
+      } else {
+        stopTextLoading(btnId);
+      }
+    });
+  });
+</script>

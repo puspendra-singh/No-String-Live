@@ -1,0 +1,658 @@
+<div class="row small-spacing">
+  <div class="col-md-12 col-xs-12">
+    <div class="box-content">
+      <h4 class="box-title"><%=__('admin.system.edit')%></h4>
+      <div class="dropdown js__drop_down">
+        <a href="<%= active_list_url%>">
+          <button type="button" class="btn btn-sm btn-violet">
+            <i class="ico ico-left fa fa-step-backward"></i
+            ><%=__('admin.system.back')%>
+          </button>
+        </a>
+      </div>
+      <hr />
+      <div class="card-content">
+        <form id="edit-product" method="post" name="edit-product" data-submit-btn-id="edit-btn-product" enctype="multipart/form-data">
+          <div class="row">
+            <div class="col-md-6 col-xs-12">
+              <label for="profile_picture"><%= __('admin.user.image')%></label>
+              <div class="form-group text-center">
+                <div class="upload-btn-wrapper">
+                  <input name="image" type="file" id="input-file-now-custom-1" class="dropify" data-show-remove="false" data-default-file="<%= result.resultOne.full_image_path%>"/>
+                  <input type="hidden" class="form-control" name="old_image" value="<%= (result.resultOne.image)	?	result.resultOne.image:'';%>" />
+                  <span class="error" id="image_error"></span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-xs-12">
+              <div class="form-name">
+                <div class="form-group name somemargin">
+                  <label for="name"><%= __('admin.product.product_title')%>
+                    <span class="required">*</span></label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    value="<%= (result.resultOne.product_title)	?	result.resultOne.product_title:'';%>" 
+                    name="product_title" 
+                    id="product_title"/>
+                  <span class="error" id="product_title_error"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-xs-12">
+              <div class="form-name">
+                <div class="form-group name somemargin">
+                  <label for="seller_name">
+                    <%= __('admin.product.seller_name') %><span class="required">
+                      *</span>
+                  </label>
+                  <select
+                    type="text"
+                    class="form-control"
+                    name="seller_name"
+                    id="seller_name"
+                  >
+                  
+                  <%- user_list %>
+                  </select>
+                  <span class="error" id="seller_name_error"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-xs-12">
+              <div class="form-name">
+                <div class="form-group name somemargin">
+                  <label for="name">
+                    <%= __('admin.product.category') %><span class="required">
+                      *</span>
+                  </label>
+                  <select name="category" type="text" class="form-control" id="category" >
+                    
+                      <%- category_list %>
+                  </select>
+                  <span class="error" id="category_error"></span>
+                </div>
+              </div>
+            </div>
+          </div> 
+          
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="brandlist">
+                <%= __('admin.product.brand') %><span class="required">
+                  *</span>
+              </label>
+              <select name="brandlist" type="text" class="form-control" id="brandlist" >
+                
+                  <%- brand_list %>
+              </select>
+              <span class="error" id="brandlist_error"></span>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="model">
+                <%= __('admin.product.model') %><span class="required">
+                  *</span>
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                name="model"
+                id="model"
+                value="<%= result && result.resultOne && result.resultOne.model	?	result.resultOne.model:'';%>"
+              />
+              <span class="error" id="model_error"></span>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="name">
+                <%= __('admin.product.condition') %><span class="required">
+                  *</span>
+              </label>
+              <select name="condition" type="text" class="form-control" id="condition" >
+                
+                  <%- condition_list %>
+              </select>
+              <span class="error" id="condition_error"></span>
+            </div>
+          
+
+            <div class="form-group col-md-6">
+              <label for="quantity">
+                <%= __('admin.product.quantity') %><span class="required">
+                  *</span>
+                </label>
+                <input
+                type="number"
+                class="form-control"
+                name="quantity"
+                id="quantity"
+                oninput="minValidation(this,1)"
+                value="<%= (result.resultOne.quantity)	?	result.resultOne.quantity:'';%>"
+                />
+                
+              <span class="error" id="quantity_error"></span>
+            </div>          
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="name">
+                <%= __('admin.product.availability') %><span class="required">
+                  *</span>
+              </label>
+              <select name="availability" type="text" class="form-control" id="availability" >
+               
+                  <%- availability_list %>
+              </select>
+              <span class="error" id="availability_error"></span>
+            </div>
+           
+          
+            <div class="form-group col-md-6">
+              <label for="name">
+                <%= __('admin.product.wattage') %><span class="required">
+                  *</span>
+              </label>
+              <select name="wattage" type="text" class="form-control" id="wattage" >
+                
+                  <%- wattage_list %>
+              </select>
+              <span class="error" id="wattage_error"></span>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="name">
+                <%= __('admin.product.hashrate') %><span class="required">
+                  *</span>
+              </label>
+              <select name="hashrate" type="text" class="form-control" id="hashrate" >
+               <%-hash_rate_list%>
+              </select>
+              <span class="error" id="hashrate_error"></span>
+            </div>
+           
+          
+            <div class="form-group col-md-6">
+              <label for="indicative_price">
+                <%= __('admin.product.indicative_price') %><span class="required">
+                  *</span>
+              </label>
+              <input
+                type="number"
+                class="form-control"
+                name="indicative_price"
+                id="indicative_price"
+                oninput="minValidation(this,1)"
+                value="<%= (result.resultOne.indicative_price)	?	result.resultOne.indicative_price:'';%>"
+                />
+              <span class="error" id="indicative_price_error"></span>
+            </div>
+          </div>
+          
+          <div class="column">
+
+            <div class="form-group">
+              <label for="upload_image">
+                <%= __('admin.product.upload_image') %>
+                </label>
+                <div class="inp_container">
+                  <input
+                type="file"
+                class="form-control"
+                name="upload_image"
+                id="upload_image"
+                value="<%= result.multipleImages %>"
+                multiple
+                />
+                <input type="hidden" name="deleted_images" id="deleted_images_input">
+                <a href="javascript:void(0)" onclick="removeAllImages()" id="remove_images" style="display: none;" class="remove-all-btn"><i class="ico ico-left fa fa-remove"></i></a>
+                </div>
+              <span class="error" id="upload_image_error"></span>
+              <div id="selectedImages_preview" style="display: none;"></div>
+              <% if(result.multipleImages.length>0){ %>
+              <div class="d-flex">
+                <div id="selectedImagesContainer" class="flex-wrap" style="display: flex;">
+                <% result.multipleImages.forEach((image,index)=>{ %>
+                 <div class="image_box default_images" id="<%=image.id%>"> <img src="<%=image.full_image_path%>" alt=""> <a href="javascript:void(0)" onclick="removeImageById('<%=image.id%>')" class="delete_btn"><i class="ico ico-left fa fa-remove"></i></a> </div>
+                <% }) %>
+              </div>
+              <div id="newselectedImagesContainer"></div>
+            </div>
+                <% } %>
+            </div>
+          </div>
+          <div class="column product_select2">
+            <div class="form-group">
+              <label for="shipment_country">
+                <%= __('admin.product.shipment_country') %><span class="required">
+                  *</span>
+                </label>
+                <select
+                type="text"
+                class="form-control"
+                name="shipment_country"
+                id="shipment_country"
+                >
+                <%- shipment_country_list%>
+              </select>
+              <span class="error" id="shipment_country_error"></span>
+            </div>
+          </div>
+
+          <div class="column">
+            <div class="form-group">
+              <label for="description">
+                <%= __('admin.product.description') %><span class="required">
+                  *</span>
+              </label>
+              <textarea
+                type="text"
+                class="form-control"
+                name="description"
+                id="description"
+              ><%= (result.resultOne.description)	?	result.resultOne.description:'';%>
+            </textarea>
+              <span class="error" id="description_error"></span>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+            </div>
+                <div class="row" id="productspecification">
+                  <div class="col-md-12">
+                    <div class="col-md-12">
+                      <div class="row box-content card">
+                        <div class="col-md-12 d-flex justify-content-between box-title align-items-center">
+                          <h4><%= __('admin.product.specification') %></h4>
+                          <button type="button" class="btn btn-sm btn-violet d-flex justify-content-center align-items-center" id="addspecification">
+                            <i class="ico ico-left fa fa-plus"></i>Add
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-group col-md-6">
+                      <label for="specific_title0">
+                        <%= __('admin.product.specification.title') %><span class="required">
+                          *</span>
+                      </label>
+                      <input
+                        type="text"
+                        class="form-control title specfield"
+                        id="specific_title0" value="<%=result.resultOne.specifications[0].title%>"
+                      />
+                      <span class="error" id="specific_error1"></span>
+                      <input type="hidden" name="specifications" id="specificationsInput">
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label for="specific_value0">
+                        <%= __('admin.product.specification.value') %><span class="required">
+                          *</span>
+                      </label>
+                      <input
+                        type="text"
+                        class="form-control value specfield"
+                        id="specific_value0 " value="<%=result.resultOne.specifications[0].value%>"
+                      />
+                      <span class="error" id="specific_error1"></span>
+                    </div>
+                  </div>
+                  <% result.resultOne.specifications.forEach((specification,index)=>{ %>
+                    <% if(index!=0){ %>
+                      <div class="col-md-12 adedSpec">
+                        <div class="form-group col-md-6">
+                          <input
+                            type="text"
+                            class="form-control title specfield"
+                            id="specific_title1" value="<%=specification.title%>"
+                          />
+                          <span class="error" id="specific_error1"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <input
+                            type="text"
+                            class="form-control value specfield"
+                            id="specific_value1" value="<%=specification.value%>"
+                          />
+                          <span class="error" id="specific_error1"></span>
+                          <a onclick="deleteSpec(Number('<%=index%>'))" class="deleteSpe"><i class="ico ico-left fa fa-remove"></i></a>
+                        </div>
+                      </div>
+                    <%}%>
+                  <%})%>
+                </div>
+            </div>
+
+              <button
+                type="button"
+                id="edit-btn-user"
+                class="btn btn-success btn-sm btn-submit"
+              >
+                <i class="ico ico-left fa fa-save"></i><%=
+                __('admin.system.submit')%>
+              </button>
+              <a href="<%= active_list_url%>">
+                <button type="button" class="btn btn-danger btn-sm">
+                  <i class="ico ico-left fa fa-remove"></i><%=
+                  __('admin.system.cancel')%>
+                </button>
+              </a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="<%=WEBSITE_JS_FILE_PATH%>scripts/jquery-3.0.0.js"></script>
+
+<!-- Select2 -->
+<link
+  rel="stylesheet"
+  href="<%= WEBSITE_JS_FILE_PATH%>plugin/select2/css/select2.min.css"
+/>
+<script src="<%= WEBSITE_JS_FILE_PATH%>plugin/select2/js/select2.min.js"></script>
+
+<!-- Dropify -->
+<link
+  rel="stylesheet"
+  href="<%= WEBSITE_JS_FILE_PATH%>plugin/dropify/css/dropify.min.css"
+/>
+<script src="<%= WEBSITE_JS_FILE_PATH%>plugin/dropify/js/dropify.min.js"></script>
+<script src="<%= WEBSITE_JS_FILE_PATH%>scripts/fileUpload.demo.min.js"></script>
+<!-- Intl tel-->
+<link
+  rel="stylesheet"
+  href="<%= WEBSITE_JS_FILE_PATH%>plugin/intlTel/css/intlTelInput.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="<%= WEBSITE_JS_FILE_PATH%>plugin/intlTel/css/demo.css"
+/>
+<script src="<%= WEBSITE_JS_FILE_PATH%>plugin/intlTel/js/intlTelInput.min.js"></script>
+
+<script>
+  /** Submit User Detail*/
+
+  $(".btn-submit").click(function () {
+    
+    var btnId = $(this).attr("id");
+    startTextLoading(btnId);
+    ajax_submit("edit-product", function (status, response) {
+      if (status) {
+        window.location.href = response.rediect_url;
+      } else {
+        stopTextLoading(btnId);
+      }
+    });
+  });
+
+  $(document).ready(function(){
+    $("#category").select2( {
+    placeholder: "Select Category",
+    allowClear: true
+    } );
+  })
+
+  $(document).ready(function(){
+    $("#condition").select2( {
+    placeholder: "Select Condition",
+    allowClear: true
+    } );
+  })
+
+  $(document).ready(function(){
+    $("#brandlist").select2( {
+    placeholder: "Select Brand",
+    allowClear: true
+    } );
+  })
+  
+  $(document).ready(function(){
+    $("#availability").select2( {
+    placeholder: "Select Availability",
+    allowClear: true
+    } );
+  })
+  $(document).ready(function(){
+    $("#wattage").select2( {
+    placeholder: "Select Wattage",
+    allowClear: true
+    } );
+  })
+  $(document).ready(function(){
+    $("#hashrate").select2( {
+    placeholder: "Select Hash Rate",
+    allowClear: true
+    } );
+  })
+  $(document).ready(function(){
+    $("#indicative_price").select2( {
+    placeholder: "Select Price",
+    allowClear: true
+    } );
+  })
+
+  $(document).ready(function(){
+    $("#seller_name").select2( {
+      placeholder: "Select Seller Name",
+    allowClear: true
+    } );
+  })
+  $(document).ready(function(){
+    $("#shipment_country").select2( {
+    allowClear: true
+    });
+  })
+
+// ===== product specification 
+var specificationCounter=document.getElementsByClassName('adedSpec').length+1;
+
+function initSpecData(){
+  let specfieldData=[];
+  let specInp=$('#specificationsInput');
+      let allTitleSpec=[...document.querySelectorAll('.title.specfield')];
+      let allValueSpec=[...document.querySelectorAll('.value.specfield')];
+      allTitleSpec.forEach((item,i)=>{
+        specfieldData[i]={title:item.value,value:allValueSpec[i].value}
+      });
+      specInp.val(JSON.stringify(specfieldData))
+}
+function initSpecCustomVal(){
+
+    $('.specfield').on('input',function(){
+      initSpecData();
+    });
+    initSpecData();
+}
+  $(document).ready(function(){
+    initSpecCustomVal();
+    $("#addspecification").click(function(){
+      let specifications=$('#productspecification');
+      let stringTags='<div class="col-md-12 adedSpec"><div class="form-group col-md-6"><input type="text" class="form-control title specfield" id="specific_title'+specificationCounter+'" /> <span class="error" id="specific_error'+specificationCounter+'"></span> </div> <div class="form-group col-md-6"> <input type="text" class="form-control value specfield" id="specific_value'+specificationCounter+'" /> <span class="error" id="specific_error'+specificationCounter+'"></span><a onclick="deleteSpec('+specificationCounter+')" class="deleteSpe"><i class="ico ico-left fa fa-remove"></i></a> </div> </div>';
+      specifications.append(stringTags);
+      specificationCounter++;
+      initSpecCustomVal();
+    });
+  });
+  function deleteSpec(index){
+    let spec=document.getElementsByClassName('adedSpec');
+    spec[index-1].remove();
+    // if(spec.length==0){
+      specificationCounter=spec.length+1;
+    // }
+    reArrangeSpec();
+  }
+  function reArrangeSpec(){
+    let specs=document.querySelectorAll('.adedSpec');
+    let title=document.querySelectorAll('.adedSpec input.title');
+    let value=document.querySelectorAll('.adedSpec input.value');
+    let deleteSpe=document.querySelectorAll('.adedSpec .deleteSpe');
+    specs.forEach((item,i)=>{
+      title[i].setAttribute('name','specifications['+(i+1)+'][title]');
+      value[i].setAttribute('name','specifications['+(i+1)+'][title]');
+      deleteSpe[i].setAttribute('onclick','deleteSpec('+(i+1)+')');
+    })
+    initSpecCustomVal();
+  }
+  // product specification =====
+
+
+// ======== product multiple images 
+  // image/jpeg
+  var selectedImages=[];
+  if(document.getElementById('upload_image')){
+    document.getElementById('upload_image').addEventListener('input',function(){
+      let files=[...this.files];
+      // selectedImages=files;
+      files.forEach((file)=>{
+        selectedImages.push(file);
+      })
+      if(selectedImages.length<=5){
+        
+        // for check file type ====>
+        let checkType=new Promise(function(resolve,resect){
+          let is_fileType_ok=false;
+          for(let i=0;i<selectedImages.length;i++){
+          if(selectedImages[i].type=="image/jpeg" || selectedImages[i].type=="image/jpg" || selectedImages[i].type=="image/png" || selectedImages[i].type=="image/gif"){
+            
+            $('#upload_image_error').text('');
+            is_fileType_ok=true;
+          }else{
+            is_fileType_ok=false;
+            selectedImages=[];
+            document.getElementById('upload_image').files=new FileListItems(selectedImages);
+            $('#upload_image_error').text('You can upload only images.');
+            break;
+          }
+          }
+          resolve(is_fileType_ok);
+        });
+          // for check file size ====>
+          checkType.then(function(data){
+            if(data){
+              renderImages(selectedImages);
+            }
+          })
+  
+          $('#upload_image_error').text('');
+      }else{
+        selectedImages=[];
+        document.getElementById('upload_image').files=new FileListItems(selectedImages);
+        $('#upload_image_error').text('You can upload max 5 images.');
+      }
+      checkRemoveAll();
+    });
+  }
+
+  function renderImages(files){
+    document.getElementById('upload_image').files=new FileListItems(selectedImages);
+    let imageWrapper=$('#newselectedImagesContainer');
+    imageWrapper.html('');
+
+    let buildImages=new Promise((resolve,reject)=>{
+      files.forEach((file,i)=>{
+        getBase64(file).then((data)=> { 
+        let string='<div class="image_box newimages"> <img src="'+data+'" alt=""> <a href="javascript:void(0)" onclick="removeImage('+i+')" class="delete_btn"><i class="ico ico-left fa fa-remove"></i></a> </div>';
+        imageWrapper.append(string);
+          if(i==files.length-1){
+            resolve(true);
+          }
+      });
+    });
+    
+    });
+    buildImages.then((data)=>{
+      if(document.getElementsByClassName('newimages').length>0){
+        imageWrapper.css('display','flex');
+      }else{
+        imageWrapper.css('display','none');
+      }
+      checkRemoveAll();
+    })
+
+
+  }
+
+  function getBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+  }
+
+  function removeImage(index){
+    let images=document.getElementsByClassName('newimages');
+    images[index].remove();
+    selectedImages.splice(index,1);
+    reArrangeIndex(selectedImages);
+    document.getElementById('upload_image').files=new FileListItems(selectedImages);
+    checkRemoveAll();
+  }
+  function reArrangeIndex(files){
+    let btns=[...document.querySelectorAll('.newimages .delete_btn')];
+    btns.forEach((btn,i)=>{
+      btn.setAttribute('onclick','removeImage('+i+')');
+    });
+  }
+  function FileListItems (files) {
+  var b = new ClipboardEvent("").clipboardData || new DataTransfer();
+  for (var i = 0; i<files.length; i++) {
+    b.items.add(files[i]);
+  }
+  return b.files;
+}
+function removeAllImages(){
+let pushAllDeletImages=new Promise((resolve,reject)=>{
+  [...document.getElementsByClassName('default_images')].forEach((item)=>{
+    deletedImages.push(item.getAttribute('id'));
+  });
+  resolve(deletedImages);
+})
+pushAllDeletImages.then((data)=>{
+  selectedImages=[];
+  document.getElementById('upload_image').files=new FileListItems(selectedImages);
+  document.getElementById('selectedImagesContainer').innerHTML="";
+  document.getElementById('newselectedImagesContainer').innerHTML="";
+  checkRemoveAll();
+  document.getElementById('deleted_images_input').value=deletedImages.toString();
+})
+}
+function checkRemoveAll(){
+  let hideBtn=document.getElementById('remove_images');
+  if(document.getElementsByClassName('image_box').length>1){
+    hideBtn.style.display="flex";
+  }else{
+    hideBtn.style.display="none";
+  }
+  if(document.getElementsByClassName('image_box').length>0){
+    document.getElementById('selectedImagesContainer').style.display="flex";
+    document.getElementById('newselectedImagesContainer').style.display="flex";
+  }else{
+    document.getElementById('selectedImagesContainer').style.display="none";
+    document.getElementById('newselectedImagesContainer').style.display="none";
+  }
+}
+checkRemoveAll();
+  var deletedImages=[];
+  function removeImageById(id){
+    let input=document.getElementById('deleted_images_input');
+    deletedImages.push(id);
+    document.getElementById(id).remove();
+    input.value=deletedImages;
+    checkRemoveAll();
+  }
+// product multiple images ======== 
+
+
+</script>
+

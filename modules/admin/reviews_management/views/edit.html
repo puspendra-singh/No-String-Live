@@ -1,0 +1,134 @@
+<div class="row small-spacing">
+  <div class="col-md-12 col-xs-12">
+    <div class="box-content">
+      <h4 class="box-title"><%=__('admin.system.edit')%></h4>
+      <div class="dropdown js__drop_down">
+        <a href="<%= active_list_url%>">
+          <button type="button" class="btn btn-sm btn-violet">
+            <i class="ico ico-left fa fa-step-backward"></i
+            ><%=__('admin.system.back')%>
+          </button>
+        </a>
+      </div>
+      <hr />
+      <div class="card-content">
+        <form id="edit-review" method="post" name="edit-review" data-submit-btn-id="edit-btn-review">
+          <div class="row">
+            <div class="col-md-6 col-xs-12">
+              <div class="form-name">
+                <div class="form-group name somemargin">
+                  <label for="name"><%= __('admin.review.rating')%>
+                    <span class="required">*</span></label>
+                  <input 
+                    type="number" oninput="minMaxValidation(this,1,5)"
+                    class="form-control" 
+                    value="<%= (result.rating)	?	result.rating:'';%>" 
+                    name="rating" 
+                    id="rating"/>
+                  <span class="error" id="rating_error"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-xs-12">
+              <div class="form-name">
+                <div class="form-group name somemargin">
+                  <label for="name"><%= __('admin.review.title')%>
+                    <span class="required">*</span></label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    value="<%= (result.review_title)	?	result.review_title:'';%>" 
+                    name="review_title" 
+                    id="review_title"/>
+                  <span class="error" id="review_title_error"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-xs-12">
+              <div class="form-name">
+                <div class="form-group name somemargin">
+                  <label for="name"><%= __('admin.review.description')%>
+                    <span class="required">*</span></label>
+                    <textarea
+                    type="text"
+                    class="form-control"
+                    name="review_description"
+                    id="review_description"
+                  ><%= (result.review_description)	?	result.review_description:'';%>
+                </textarea>
+                  <span class="error" id="review_description_error"></span>
+                </div>
+              </div>
+            </div>
+          </div> 
+
+
+
+
+
+              <button
+                type="button"
+                id="edit-btn-user"
+                class="btn btn-success btn-sm btn-submit"
+              >
+                <i class="ico ico-left fa fa-save"></i><%=
+                __('admin.system.submit')%>
+              </button>
+              <a href="<%= active_list_url%>">
+                <button type="button" class="btn btn-danger btn-sm">
+                  <i class="ico ico-left fa fa-remove"></i><%=
+                  __('admin.system.cancel')%>
+                </button>
+              </a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="<%=WEBSITE_JS_FILE_PATH%>scripts/jquery-3.0.0.js"></script>
+
+<!-- Select2 -->
+<link
+  rel="stylesheet"
+  href="<%= WEBSITE_JS_FILE_PATH%>plugin/select2/css/select2.min.css"
+/>
+<script src="<%= WEBSITE_JS_FILE_PATH%>plugin/select2/js/select2.min.js"></script>
+
+<!-- Dropify -->
+<link
+  rel="stylesheet"
+  href="<%= WEBSITE_JS_FILE_PATH%>plugin/dropify/css/dropify.min.css"
+/>
+<script src="<%= WEBSITE_JS_FILE_PATH%>plugin/dropify/js/dropify.min.js"></script>
+<script src="<%= WEBSITE_JS_FILE_PATH%>scripts/fileUpload.demo.min.js"></script>
+<!-- Intl tel-->
+<link
+  rel="stylesheet"
+  href="<%= WEBSITE_JS_FILE_PATH%>plugin/intlTel/css/intlTelInput.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="<%= WEBSITE_JS_FILE_PATH%>plugin/intlTel/css/demo.css"
+/>
+<script src="<%= WEBSITE_JS_FILE_PATH%>plugin/intlTel/js/intlTelInput.min.js"></script>
+
+<script>
+  /** Submit User Detail*/
+
+$(document).ready(function(){
+  $(".btn-submit").click(function () {
+    var btnId = $(this).attr("id");
+    startTextLoading(btnId);
+    ajax_submit("edit-review", function (status, response) {
+      if (status) {
+        window.location.href = response.rediect_url;
+      } else {
+        stopTextLoading(btnId);
+      }
+    });
+  });
+});
+</script>
+

@@ -1,0 +1,66 @@
+<div class="row small-spacing">
+  <div class="col-md-12 col-xs-12">
+    <div class="box-content">
+      <h4 class="box-title">
+        <%= __('admin.system.add')%>
+        <%=key.charAt(0).toUpperCase()+key.substr(1)%>
+      </h4>
+      <div class="dropdown js__drop_down">
+        <a href="<%= WEBSITE_ADMIN_URL%>text_settings/<%= key%>">
+          <button type="button" class="btn btn-sm btn-violet">
+            <i class="ico ico-left fa fa-step-backward"></i><%=
+            __('admin.system.back')%>
+          </button>
+        </a>
+      </div>
+      <hr />
+      <div class="card-content">
+        <form
+          id="add-text-setting"
+          method="post"
+          name="addMaster"
+          data-submit-btn-id="add-btn-text-setting"
+        >
+          <div class="form-group">
+            <label for="key"><%= __('admin.system.key')%></label>
+            <input type="text" name="key" class="form-control" id="key" />
+            <span class="error" id="key_error"></span>
+          </div>
+          <div class="form-group">
+            <label for="name"><%= __('admin.system.value')%></label>
+            <input type="text" name="value" class="form-control" id="value" />
+            <span class="error" id="value_error"></span>
+          </div>
+          <button
+            type="button"
+            id="add-btn-text-setting"
+            class="btn btn-primary btn-sm btn-submit"
+          >
+            <%= __('admin.system.submit')%><span></span>
+          </button>
+          <a
+            href="/admin/text_settings/<%=key%>"
+            type="button"
+            class="btn btn-danger btn-sm"
+            ><%= __('admin.system.cancel')%></a
+          >
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="<%=WEBSITE_JS_FILE_PATH%>scripts/jquery-3.0.0.js"></script>
+<script>
+  $(".btn-submit").click(function () {
+    var btnId = $(this).attr("id");
+    startTextLoading(btnId);
+    ajax_submit("add-text-setting", function (status, response) {
+      if (status) {
+        window.location.href = response.rediect_url;
+      } else {
+        stopTextLoading(btnId);
+      }
+    });
+  });
+</script>

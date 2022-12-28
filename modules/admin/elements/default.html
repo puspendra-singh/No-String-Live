@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <title><%=WEBSITE_TITLE%></title>
+
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="<%=WEBSITE_CSS_FILE_PATH%>styles/style.min.css"/>
+
+    <!-- Material Design Icon -->
+    <link rel="stylesheet" href="<%=WEBSITE_CSS_FILE_PATH%>fonts/material-design/css/materialdesignicons.css"/>
+
+    <!-- Sweet Alert -->
+    <link rel="stylesheet" href="<%=WEBSITE_CSS_FILE_PATH%>plugin/sweet-alert/sweetalert.css"/>
+
+    <link rel="stylesheet" href="<%= WEBSITE_CSS_FILE_PATH%>plugin/timeline/css/style.css" />
+
+    <!-- Data Tables -->
+    <link  rel="stylesheet" href="<%=WEBSITE_CSS_FILE_PATH%>plugin/datatables/media/css/dataTables.bootstrap.min.css" />
+    <link rel="stylesheet" href="<%=WEBSITE_CSS_FILE_PATH%>plugin/datatables/extensions/Responsive/css/responsive.bootstrap.min.css"/>
+
+    <!-- Form Wizard -->
+    <link rel="stylesheet" href="<%=WEBSITE_CSS_FILE_PATH%>plugin/form-wizard/prettify.css"/>
+
+    <link rel="stylesheet" href="<%=WEBSITE_CSS_FILE_PATH%>styles/developer.css"/>
+  </head>
+  <script>
+    PAGE_LENGTH_MENU = [
+      [10, 50, 100, 1000],
+      [10, 50, 100, "All"],
+    ];
+    DEFAULT_DATE_TIME_FORMAT = "<%= DEFAULT_DATE_TIME_FORMAT%>";
+    WEBSITE_ADMIN_URL        = "<%= WEBSITE_ADMIN_URL %>";
+  </script>
+  
+  <body>
+    <%-include('left_menu.html')%> 
+    <%-include('breadcrumbs.html')%>
+
+    <div id="wrapper">
+      <div class="main-content">
+        <% if(flash_status == STATUS_SUCCESS){ %>
+        <div class="alert alert-success" role="alert">
+          <%=flash_success_message%>
+        </div>
+        
+        <% }if(flash_status == STATUS_ERROR){%>
+        <div class="alert alert-danger" role="alert">
+          <%=flash_error_message%>
+        </div>
+        <%} %> 
+        <%-body%>
+
+        <footer class="footer">
+          <ul class="list-inline">
+            <li><%=ADMIN_FOOTER_HEADING%></li>
+          </ul>
+        </footer>
+      </div>
+    </div>
+
+    <!-- 
+	================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    <script src="<%=WEBSITE_JS_FILE_PATH%>scripts/jquery.min.js"></script>
+    <script src="<%=WEBSITE_JS_FILE_PATH%>scripts/modernizr.min.js"></script>
+    <script src="<%=WEBSITE_JS_FILE_PATH%>plugin/bootstrap/js/bootstrap.min.js"></script>
+    <script src="<%=WEBSITE_JS_FILE_PATH%>plugin/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="<%=WEBSITE_JS_FILE_PATH%>plugin/sweet-alert/sweetalert.min.js"></script>
+
+    <!-- Data Tables -->
+    <script src="<%=WEBSITE_JS_FILE_PATH%>plugin/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="<%=WEBSITE_JS_FILE_PATH%>plugin/datatables/media/js/dataTables.bootstrap.min.js"></script>
+    <script src="<%=WEBSITE_JS_FILE_PATH%>plugin/datatables/extensions/Responsive/js/dataTables.responsive.min.js"></script>
+    <script src="<%=WEBSITE_JS_FILE_PATH%>plugin/datatables/extensions/Responsive/js/responsive.bootstrap.min.js"></script>
+    <script src="<%=WEBSITE_JS_FILE_PATH%>scripts/datatables.demo.min.js"></script>
+
+    <!-- Moment -->
+    <script src="<%=WEBSITE_JS_FILE_PATH%>plugin/moment/moment.js"></script>
+
+    <!-- Demo Scripts -->
+    <script src="<%=WEBSITE_JS_FILE_PATH%>scripts/form.demo.min.js"></script>
+
+    <script src="<%=WEBSITE_JS_FILE_PATH%>scripts/jquery.form.js"></script>
+    <script src="<%=WEBSITE_JS_FILE_PATH%>scripts/jquery.serialize-object.js"></script>
+    <script src="<%=WEBSITE_JS_FILE_PATH%>scripts/main.min.js"></script>
+
+    <!-- User defined js-->
+    <script src="<%=WEBSITE_JS_FILE_PATH%>scripts/jquery.form.js"></script>
+    <script src="<%=WEBSITE_JS_FILE_PATH%>custom.js"></script>
+
+  </body>
+</html>

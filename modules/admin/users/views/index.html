@@ -1,0 +1,83 @@
+<div class="row small-spacing">
+  <div class="col-lg-3 col-md-6 col-xs-12">
+    <a href="/admin/users">
+      <div class="box-content bg-success text-white">
+        <div class="statistics-box with-icon">
+          <i class="ico small fa fa-users"></i>
+          <p class="text text-white"><%= __('admin.system.users')%></p>
+          <h2 class="counter">
+            <%= (result && result.totalUserCount) ? result.totalUserCount: 0;%>
+          </h2>
+          <!-- <span class="notice bg-white text-dark" style="font-weight: 500;">Verified dealers - <%= (result && result.verifiedDealerCount) ? result.verifiedDealerCount: 0;%></span>
+          <span class="notice bg-white text-dark" style="font-weight: 500;">Private sellers - <%= (result && result.privateSellerCount) ? result.privateSellerCount: 0;%></span> -->
+        </div>
+      </div>
+    </a>
+  </div>
+  <!-- <div class="col-lg-3 col-md-6 col-xs-12">
+    <a href="/admin/products">
+      <div class="box-content bg-warning text-white">
+        <div class="statistics-box with-icon">
+          <i class="ico small fa fa fa-product-hunt"></i>
+          <p class="text text-white"><%= __('admin.system.products')%></p>
+          <h2 class="counter">
+            <%= (result && result.totalProductCount) ? result.totalProductCount: 0;%>
+          </h2>
+          <span class="notice bg-white text-dark" style="font-weight: 500;">Verified dealers - <%= (result && result.verifiedDealerProductCount) ? result.verifiedDealerProductCount: 0;%></span>
+          <span class="notice bg-white text-dark" style="font-weight: 500;">Private sellers - <%= (result && result.privateSellerProductCount) ? result.privateSellerProductCount: 0;%></span>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="col-lg-3 col-md-6 col-xs-12">
+    <a href="/admin/orders">
+      <div class="box-content bg-info text-white">
+        <div class="statistics-box with-icon">
+          <i class="ico small fa fa-cart-plus"></i>
+          <p class="text text-white"><%= __('admin.system.orders')%></p>
+          <h2 class="counter">
+            <%= (result && result.totalOrdersCount) ? result.totalOrdersCount: 0;%>
+          </h2>
+          <span class="notice bg-white text-dark" style="font-weight: 500; opacity: 0;">Sold - <%= (result && result.soldOrdersCount) ? result.soldOrdersCount: 0;%></span>
+          <span class="notice bg-white text-dark" style="font-weight: 500; opacity: 0;">Requested - <%= (result && result.requestedOrdersCount) ? result.requestedOrdersCount: 0;%></span>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="col-lg-3 col-md-6 col-xs-12">
+    <a href="/admin/reviews">
+      <div class="box-content bg-info2 text-white"> 
+        <div class="statistics-box with-icon">
+          <i class="ico small fa fa-star"></i>
+          <p class="text text-white"><%= __('admin.system.reviews')%></p>
+          <h2 class="counter">
+            <%= (result && result.totalReviewCount) ? result.totalReviewCount: 0;%>
+          </h2>
+          <span class="notice bg-white text-dark" style="font-weight: 500; opacity: 0;">5 Stars - <%= (result && result.fiveStartReviewCount) ? result.fiveStartReviewCount: 0;%></span>
+        </div>
+      </div>
+    </a>
+  </div> -->
+  	<!--- User chart start -->
+	<!-- <div class="col-lg-12 col-md-12">
+		<div class="box-content">
+			<h4 class="box-title"><%= __('admin.reports_statistics.registered_users') %></h4>
+			<canvas id="bar-chartjs-chart-users" class="chartjs-chart" width="480" height="195"></canvas>
+		</div>
+	</div> -->
+	<!--- User chart start -->
+</div>
+
+
+<!-- chart.js Chart -->
+<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/chart/chartjs/Chart.bundle.min.js"></script>
+<script src="<%=WEBSITE_JS_FILE_PATH%>scripts/chart.chartjs.init.min.js"></script>
+<script type="text/javascript" src="<%=WEBSITE_JS_FILE_PATH%>scripts/jquery-3.0.0.js"></script>
+<script type="text/javascript">
+  $(document).ready(()=>{
+    /** Update user graph*/
+    // var userRecords =   <%- JSON.stringify(result.monthYearWiseData); %>;
+    // var ctx = document.getElementById('bar-chartjs-chart-users').getContext('2d');
+    // new Chart(ctx, userRecords);
+  });
+</script>

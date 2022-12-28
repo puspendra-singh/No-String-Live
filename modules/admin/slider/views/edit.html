@@ -1,0 +1,210 @@
+<%
+  var imageSelected = (result.slide_type && result.slide_type == 'image') ? 'selected' : '';
+  var videoSelected = (result.slide_type && result.slide_type == 'video') ? 'selected' : '';
+  var beforeLoginSelected = (result.visibility && result.visibility == BEFORE_LOGIN_SLIDE) ? 'selected' : '';
+  var afterLoginSelected = (result.visibility && result.visibility == AFTER_LOGIN_SLIDE) ? 'selected' : '';
+%>
+
+<div class="row small-spacing">
+  <div class="col-md-12 col-xs-12">
+    <div class="box-content">
+      <h4 class="box-title"><%=__('admin.system.edit')%></h4>
+      <div class="dropdown js__drop_down">
+        <a href="<%= active_list_url%>">
+          <button type="button" class="btn btn-sm btn-violet">
+            <i class="ico ico-left fa fa-step-backward"></i
+            ><%=__('admin.system.back')%>
+          </button>
+        </a>
+      </div>
+      <hr />
+      <div class="card-content">
+        <form
+          id="edit-slider"
+          method="post"
+          name="edit-slider"
+          class="on_click_submit"
+          data-submit-btn-id="edit-btn-slider"
+        >
+        <div class="row">
+            <div class="col-md-6 col-xs-6">
+              <div class="col-md-12 col-xs-12">
+                <div class="form-group">
+                  <label for="title"
+                    ><%= __('admin.slider.title')%>
+                    <span class="required">*</span></label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="title"
+                    id="title"
+                    value="<%= (result.title ) ? result.title : ''%>"
+                  />
+                  <span class="error" id="title_error"></span>
+                </div>
+              </div>
+              <div class="col-md-12 col-xs-12">
+                <div class="form-group">
+                  <label for="subtitle"><%= __('admin.slider.subtitle')%> </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="subtitle"
+                    id="subtitle"
+                    value="<%= (result.subtitle ) ? result.subtitle : ''%>"
+                  />
+                  <span class="error" id="subtitle_error"></span>
+                </div>
+              </div>
+              <div class="col-md-12 col-xs-12">
+                <div class="form-group">
+                  <label for="link_page"
+                    ><%= __('admin.slider.link_page')%>
+                    </label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="link_page"
+                    id="link_page"
+                    value="<%= (result.link_page && result.link_page != '#') ? result.link_page : ''%>"
+                  />
+                  <span class="error" id="link_page_error"></span>
+                </div>
+              </div>
+              <div class="col-md-12 col-xs-12">
+                <div class="form-group">
+                  <label for="link_page" ><%= __('admin.slider.slide_type')%> <span class="required">*</span></label>
+                  <select class="form-control" name="slide_type">
+                    <option value=""><%= __('admin.slider.select_slide_type')%></option>
+                    <option <%= imageSelected%> value="image"><%= __('admin.slider.select_slide_type_image')%></option>
+                    <option <%= videoSelected%> value="video"><%= __('admin.slider.select_slide_type_video')%></option>
+                  </select>
+                  <span class="error" id="slide_type_error"></span>
+                </div>
+              </div>
+              <div class="col-md-12 col-xs-12">
+                <div class="form-group">
+                  <label for="link_page" ><%= __('admin.slider.slidevisibility')%> <span class="required">*</span></label>
+                  <select class="form-control" name="slide_visibility">
+                    <option value=""><%= __('admin.slider.select_slidevisibility')%></option>
+                    <option <%= beforeLoginSelected%> value="<%=BEFORE_LOGIN_SLIDE%>"><%= __('admin.slider.select_slidevisibility.beforelogin')%></option>
+                    <option <%= afterLoginSelected%> value="<%=AFTER_LOGIN_SLIDE%>"><%= __('admin.slider.select_slidevisibility.afterlogin')%></option>
+                  </select>
+                  <span class="error" id="slide_visibility_error"></span>
+                </div>
+              </div>
+              <div class="col-md-6 col-xs-6">
+                <div class="form-group">
+                  <label for="image">Upload <%= __('admin.slider.image_video')%>
+                    <span class="required"> </span>
+                  </label>
+                  <div class="file_upload_shell">
+                    <input type="text" class="form-control" readonly />
+                    <div class="input-group-btn">
+                      <span class="fileUpload">
+                        <span class="upl_icon"><i><img src="<%=WEBSITE_ADMIN_URL%>assets/images/file-upload-icon.svg"></i></span>
+                        <input type="file" class="upload up" id="up" name="image"/> 
+                      </span>
+                    </div>
+                  </div>
+                  <span class="error" id="image_error"></span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-xs-6">
+              <div class="col-md-12 col-xs-12">
+                <div class="form-group">
+                  <div class="upload-btn-wrapper">
+                      <label for="Image" ><%= __('admin.slider.image_video')%></label>
+                      <div>
+                      <%
+                        if(result.slide_type == 'image'){%>
+                          <a href="<%= result.full_image_path%>" download>
+                            <img src="<%= result.full_image_path%>" height="300px;" width="300px;" alt="Slide Image"/>
+                          </a>
+                       <% }
+
+                       if(result.slide_type == 'video'){%>
+                        <a href="<%= result.full_image_path%>" download>
+                          <img src="<%=WEBSITE_ADMIN_URL%>assets/images/video_icon.png" height="300px;" width="300px;" alt="Slide Video" /> 
+                        </a>
+                     <% }
+                      %>
+                    </div>
+                      <input type="hidden" class="form-control" name="old_image" value="<%= (result.image)	?	result.image:'';%>" /> 
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 col-xs-12">
+              <div class="col-md-12 col-xs-12">
+                <div class="form-group">
+                  <label for="description"
+                    ><%= __('admin.system.description')%>
+                    <span class="required">*</span></label
+                  >
+                  <textarea
+                    class="form-control ckeditor"
+                    name="description"
+                    id="description"
+                  ><%= (result.description ) ? result.description : ''%></textarea>
+                  <span class="error" id="description_error"></span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 col-xs-12">
+              <div class="col-md-12 col-xs-12">
+                <button
+                type="button"
+                id="add-btn-slider"
+                class="btn btn-success btn-sm btn-submit"
+              >
+                <i class="ico ico-left fa fa-save"></i> <%=
+                __('admin.system.submit')%>
+              </button>
+              <a
+                href="<%= active_list_url%>"
+                type="button"
+                class="btn btn-danger btn-sm"
+                ><i class="ico ico-left fa fa-remove"></i><%=
+                __('admin.system.cancel')%></a
+              >
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!--- Start JS -->
+<script type="text/javascript" src="<%=WEBSITE_JS_FILE_PATH%>scripts/jquery.min.js"></script>
+
+<!-- CK editor -->
+<script type='text/javascript' src="<%=WEBSITE_JS_FILE_PATH%>plugin/ckeditor/ckeditor.js"></script>
+
+<!-- Dropify -->
+<link rel="stylesheet" href="<%= WEBSITE_JS_FILE_PATH%>plugin/dropify/css/dropify.min.css">
+<script src="<%= WEBSITE_JS_FILE_PATH%>plugin/dropify/js/dropify.min.js"></script>
+<script src="<%= WEBSITE_JS_FILE_PATH%>scripts/fileUpload.demo.min.js"></script>
+  
+<script type="text/javascript">
+
+  /** Submit Slider detail*/
+  $(".btn-submit").click(function () {
+    updateCkeditorValue();
+
+    var btnId = $(this).attr("id");
+    startTextLoading(btnId);
+    ajax_submit("edit-slider", function (status, response) {
+      if (status) {
+        window.location.href = response.rediect_url;
+      } else {
+        stopTextLoading(btnId);
+      }
+    });
+  });
+</script>
+<!--- End JS -->

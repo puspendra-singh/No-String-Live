@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title><%=WEBSITE_TITLE%></title>
+    	<!-- favicon icon -->
+      <link rel="shortcut icon" href="<%=WEBSITE_CSS_FILE_PATH%>images/logo/favicon.ico" type="image/x-icon">
+
+    <link rel="stylesheet" href="<%=WEBSITE_CSS_FILE_PATH%>styles/style.min.css" />
+  </head>
+  <script>
+    DEFAULT_DATE_TIME_FORMAT = "<%= DEFAULT_DATE_TIME_FORMAT%>";
+  </script>
+  <body>
+    <div id="single-wrapper">
+      <form
+        name="login-user"
+        id="login-user"
+        data-submit-btn-id="submit-login-user"
+        method="POST"
+        class="frm-single on_click_submit"
+      >
+        <div class="inside">
+          <div class="title">
+            <img class="admin_logo-2" src="./assets/images/logo/logo.png" alt="logo" />
+          </div>
+          <div class="frm-title login_text"><%= __('admin.login.login')%></div>
+          <div>
+            <% if(flash_status == STATUS_SUCCESS){ %>
+            <div class="alert alert-success" role="alert">
+              <%=flash_success_message%>
+            </div>
+            <% }if(flash_status == STATUS_ERROR){%>
+            <div class="alert alert-danger" role="alert">
+              <%=flash_error_message%>
+            </div>
+            <%} %>
+          </div>
+          <div class="frm-input form-group">
+            <input
+              type="text"
+              name="username"
+              id="username"
+              placeholder="Email"
+              class="frm-inp"
+            />
+            <i class="fa fa-envelope frm-ico"></i>
+            <span class="error" id="username_error"></span>
+          </div>
+          <div class="form-group">
+            <div class="frm-input">
+              <input
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Password"
+                class="frm-inp"
+              />
+              <i class="fa fa-lock frm-ico"></i>
+              <span class="error" id="password_error"></span>
+            </div>
+          </div>
+
+          <div class="clearfix margin-bottom-20">
+            <div>
+              <a href="/admin/forgot_password" class="a-link">
+                <i class="fa fa-unlock-alt"></i><%=
+                __('admin.login.forgot_password')%>
+              </a>
+            </div>
+          </div>
+          <button
+            type="button"
+            id="submit-login-user"
+            class="btn-submit frm-submit"
+          >
+            <%= __('admin.login.login')%><i
+              class="fa fa-arrow-circle-right"    
+            ></i>
+          </button>
+          <div class="frm-footer"><%= ADMIN_FOOTER_HEADING%></div>
+        </div>
+      </form>
+    </div>
+    <script src="<%=WEBSITE_JS_FILE_PATH%>scripts/jquery-3.0.0.js"></script>
+    <script src="<%=WEBSITE_JS_FILE_PATH%>plugin/moment/moment.js"></script>
+    <script src="<%=WEBSITE_JS_FILE_PATH%>custom.js"></script>
+    <script src="<%=WEBSITE_JS_FILE_PATH%>scripts/jquery.form.js"></script>
+    <script>
+      $(".btn-submit").click(function () {
+        var btnId = $(this).attr("id");
+        startTextLoading(btnId);
+        ajax_submit("login-user", function (status, response) {
+          if (status) {
+            window.location.href = response.rediect_url;
+          } else {
+            stopTextLoading(btnId);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

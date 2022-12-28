@@ -1,0 +1,67 @@
+<div class="row small-spacing">
+  <div class="col-md-12 col-xs-12">
+    <div class="box-content">
+      <h4 class="box-title"><%=__('admin.email_templates.edit_template')%></h4>
+      <hr />
+      <div class="card-content">
+          <form id="edit-email-temlplate" method="post" name="edit-email-temlplate" class="on_click_submit" data-submit-btn-id="edit-btn-email-temlplate">
+          <div class="row">
+            <div class="col-md-12 col-xs-12">
+              <div class="form-group">
+                <label for="name" ><%= __('admin.system.name')%><span class="required"> *</span ></label>
+                <input type="text" class="form-control"  value="<%= (result.name)	?	result.name:'';%>" name="name" id="name" />
+                <span class="error" id="name_error"></span>
+              </div>
+            </div>
+            <div class="col-md-12 col-xs-12"> 
+              <div class="form-group">
+                <label for="subject" ><%= __('admin.email_templates.subject')%><span class="required"> *</span></label>
+                <input type="text" class="form-control" name="subject" id="subject" value="<%= (result.subject)	?	result.subject:'';%>" />
+                <span class="error" id="subject_error"></span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-md-12 col-xs-12">
+              <div class="form-group">
+                <label for="description"><%= __('admin.system.description')%><span class="required"> *</span ></label >
+                <textarea class="form-control ckeditor" name="description" id="description"><%= (result.description)	?	result.description:'';%></textarea>
+                <span class="error" id="description_error"></span>
+              </div>
+            </div>
+          </div>
+         
+          <button type="button" id="edit-btn-email-temlplate" class="btn btn-success btn-sm btn-submit" >
+            <i class="ico ico-left fa fa-save"></i>
+            <%=  __('admin.system.submit')%>
+          </button>
+          <a href="<%= active_list_url%>">
+            <button type="button" class="btn btn-danger btn-sm">
+              <i class="ico ico-left fa fa-remove"></i>
+              <%= __('admin.system.cancel')%>
+            </button>
+          </a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script type='text/javascript' src="<%=WEBSITE_JS_FILE_PATH%>scripts/jquery.min.js"></script>
+<script type='text/javascript' src="<%=WEBSITE_JS_FILE_PATH%>plugin/ckeditor/ckeditor.js"></script>
+<script type='text/javascript'>
+
+  /** Submit Detail*/
+  $(".btn-submit").click(function () {
+    updateCkeditorValue();
+    var btnId = $(this).attr("id");
+    startTextLoading(btnId);
+    ajax_submit("edit-email-temlplate", function (status, response) {
+      if (status) {
+        window.location.href = response.rediect_url;
+      } else {
+        stopTextLoading(btnId);
+      }
+    });
+  });
+</script>

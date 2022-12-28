@@ -1,0 +1,196 @@
+<div class="row small-spacing">
+	<!--- Search Start-->
+    <div class="col-lg-12 col-md-12 col-xs-12">
+		<div class="box-content card bordered-all primary js__card">
+			<h4 class="box-title bg-primary with-control">
+				<%= __("admin.system.search")%>
+				<span class="controls">
+					<button type="button" class="control fa fa-minus js__card_minus"></button>
+				</span>
+			</h4>
+			<div class="card-content js__card_content">
+				<form id="searchForm" name="searchForm" >
+					<div class="row">
+						<div class="col-md-3 col-xs-12">
+							<div class="form-group">
+								<input type="hidden" name="from_date" id="from_date"/>
+								<input type="hidden" name="to_date" id="to_date"/>
+								<input class="form-control input-daterange-datepicker" id ="daterange" type="text" name="daterange" placeholder="<%= __('admin.feedback.search_by_date')%>">
+							</div>
+						</div>	
+						<div class="col-md-3 col-xs-12">
+							<div class="form-group">
+								<input class="form-control" id ="seller_name" type="text" name="seller_name" placeholder="<%= __('admin.user.search_by_seller_name')%>">
+							</div>
+						</div>
+						<div class="col-md-3 col-xs-12">
+							<div class="form-group">
+								<select class="form-control" name="status" id="search_by_category" class="search_by_category">
+									<option value=""><%= __('admin.search.search_by_category')%></option>
+									<%
+										if(typeof categoryList!== typeof undefined && categoryList.length > 0){
+											categoryList.map(searchStatus=>{
+												var selectedFlag    = (typeof searchStatus.status_type !== typeof undefined && searchStatus.status_type  && searchStatus.status_type == statusType) ? "selected" : "";
+												%>
+												<option value="<%=searchStatus._id%>"  <%=selectedFlag%>><%=searchStatus.name%></option>    
+											<%      
+											});
+										} %>
+								</select>
+							</div>
+						</div>
+						<div class="col-md-3 col-xs-12">
+							<button type="button" id="reset" class="btn btn-md waves-effect btn-danger">
+							  <i class="ico ico-left fa fa-refresh"></i>
+							  <%= __("admin.system.reset")%>
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!--- Search End-->
+
+	<!--- Datatable Start-->
+	<div class="col-lg-12 col-md-12">
+		<div class="box-content">
+			<h4 class="box-title"><%= __('admin.reports_statistics.registered_products') %></h4>
+			<div class="dropdown js__drop_down">
+				<div class="input-group">
+					<button type="button" class="btn btn-default btn-xs text-black no-border dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<span><%=__("admin.system.export_data")%></span> 
+						<span class="fa fa-caret-down"></span> 
+						<span class="sr-only">Toggle Dropdown</span> 
+					</button>
+					<ul class="dropdown-menu dropdown-menu-right">
+						<li><a href="<%= active_list_url%>/products/export_filtered/xlsx"><%=__("admin.system.export_filtered_in_excel")%></a></li>
+						<li><a href="<%= active_list_url%>/products/export_all/xlsx"><%=__("admin.system.export_all_in_excel")%></a></li>
+						<li><a href="<%= active_list_url%>/products/export_filtered/pdf"><%=__("admin.system.export_filtered_in_pdf")%></a></li>
+						<li><a href="<%= active_list_url%>/products/export_all/pdf"><%=__("admin.system.export_all_in_pdf")%></a></li>
+					</ul>
+				</div>
+			</div>
+			<table id="data-table" class="table table-striped table-bordered display" style="width:100%">
+				<thead>
+					<tr>
+						<th><%= __('admin.system.name') %></th>
+						<th><%=__('admin.order.seller_name')%></th>
+						<th><%= __('admin.product.indicative_price') %></th>
+						<th><%= __('admin.product.category') %></th>
+						<th><%= __('admin.product.quantity') %></th>
+						<th><%= __('admin.system.status') %></th>
+						<th><%= __('admin.system.created') %></th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</div>
+	<!--- Datatable End-->
+</div>
+
+<!-- DateRangepicker -->
+<link rel="stylesheet" href="<%=WEBSITE_CSS_FILE_PATH%>plugin/daterangepicker/daterangepicker.css">
+
+<script src="<%=WEBSITE_JS_FILE_PATH%>scripts/jquery-3.0.0.js"></script>
+<script>
+	var dataTable 	= "";
+	let recordsTotal = 0;
+	let monthYearWiseData = {};
+
+	/** Set Data table */
+	$(document).ready(()=>{
+		dataTable = $('#data-table').DataTable({
+			"bStateSave"	: true,
+			"fnStateSave"	: function (oSettings, oData) {
+				localStorage.setItem( 'DataTables', JSON.stringify(oData) );
+			},
+			"fnStateLoad"	: function (oSettings) {
+				return JSON.parse( localStorage.getItem('DataTables') );
+			},
+			"dom"		: 'ltrip',
+            "serverSide": true,
+            "scrollX"	: true,
+            "sorting"	: [[5,"desc"]],
+            "lengthMenu": PAGE_LENGTH_MENU,
+            "processing": true,
+			"columns": [
+				{
+					"data" : {},
+					"orderable" : true,
+					"name": "product_title",
+					"render" : (result=>{
+						let linkTag='<a href="<%=WEBSITE_ADMIN_URL%>products/view/'+result._id+'" class="view_order_links" target="_blank">'+(result.product_title ? result.product_title:'')+'</a>'
+						return linkTag;
+					})
+				},
+				{
+					"data" : {},
+					"orderable" : false,
+					"name": "seller_name",
+					"render" : (result=>{
+						let linkTag='<a href="<%=WEBSITE_ADMIN_URL%>users/view/'+result.sellerDetails._id+'" class="view_order_links" target="_blank">'+(result.seller_name ? result.seller_name : '')+'</a>'
+						return linkTag;
+					})
+				}, 
+				{"data" : 'indicative_price'},
+				{"data" : 'category.name'},
+				{"data" : 'quantity'},
+				{
+					data: 'is_active',
+					render:  (is_active=> {
+						var labelClass 	= is_active == "<%=ACTIVE%>" ? "bg-success" : "bg-warning";
+						var labelText 	= is_active == "<%=ACTIVE%>" ? "Active" : "Inactive";
+						return ('<span class="notice text-white ' +labelClass +'">' +labelText +"</span>");
+					})
+				},	
+				{
+					"data" : 'created',
+					render : (created=>{
+						return moment(created).format(DEFAULT_DATE_TIME_FORMAT);
+					})
+				},  
+            ],
+            "ajax": {
+				"type" 	    : "POST",
+				"url"		: "<%= active_list_url%>/products",
+				"data"      : (d=>{
+					d.fromDate  = $("#from_date").val();
+					d.toDate  	= $("#to_date").val();
+					d.seller_name =	$("#seller_name").val();
+					d.category =  $("#search_by_category").val();
+				}),
+				"dataSrc"	: (res=>{
+					return res.data;
+				})
+			}	
+			
+		});	
+
+		$(document).on("input","#seller_name",function(){
+			dataTable.draw();
+		});
+		$(document).on("change","#search_by_category",function(){
+			dataTable.draw();
+		});
+	});
+
+	/** Function to search in data table */
+	searchDatatable = (columnNumber=>{
+		var data = $('#column_number_'+columnNumber).val();
+		dataTable.search(data,columnNumber).draw();
+	});
+
+	/** Function to searching in data table by date range*/
+	$(function() {
+		$('input[name="daterange"]').daterangepicker({
+			opens: 'right'
+		}, function(start, end, label) {
+			$("#from_date").val(start);
+			$("#to_date").val(end);
+			$('input[name="daterange"]').val(start.format('MM/DD/YYYY') + ' - ' + end.format('MM/DD/YYYY'));
+			dataTable.draw();
+		});
+	});
+</script>
+<script src="<%=WEBSITE_JS_FILE_PATH%>datatable_state_storage.js"></script>

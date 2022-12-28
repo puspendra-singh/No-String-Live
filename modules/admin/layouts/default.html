@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title><%=WEBSITE_TITLE%></title>
+	<!-- favicon icon -->
+	<link rel="shortcut icon" href="<%=WEBSITE_CSS_FILE_PATH%>images/logo/favicon.ico" type="image/x-icon">
+
+	<!-- Main Styles -->
+	<link rel="stylesheet" href="<%=WEBSITE_CSS_FILE_PATH%>styles/style.min.css">
+	
+	<!-- Material Design Icon -->
+	<link rel="stylesheet" href="<%=WEBSITE_CSS_FILE_PATH%>fonts/material-design/css/materialdesignicons.css">
+
+	<!-- mCustomScrollbar -->
+	<link rel="stylesheet" href="<%=WEBSITE_CSS_FILE_PATH%>plugin/mCustomScrollbar/jquery.mCustomScrollbar.min.css">
+
+	<!-- Waves Effect -->
+	<link rel="stylesheet" href="<%=WEBSITE_CSS_FILE_PATH%>plugin/waves/waves.min.css">
+
+	<!-- Sweet Alert -->
+	<link rel="stylesheet" href="<%=WEBSITE_CSS_FILE_PATH%>plugin/sweet-alert/sweetalert.css">
+	<!-- Data Tables -->
+	<link rel="stylesheet" href="<%=WEBSITE_CSS_FILE_PATH%>plugin/datatables/media/css/dataTables.bootstrap.min.css">
+	<link rel="stylesheet" href="<%=WEBSITE_CSS_FILE_PATH%>plugin/datatables/extensions/Responsive/css/responsive.bootstrap.min.css">
+	
+	<!-- Form Wizard -->
+	<link rel="stylesheet" href="<%=WEBSITE_CSS_FILE_PATH%>plugin/form-wizard/prettify.css">
+	
+	<!-- FlexDatalist -->
+	<link rel="stylesheet" href="<%=WEBSITE_CSS_FILE_PATH%>plugin/flexdatalist/jquery.flexdatalist.min.css">
+
+	<!-- Popover -->
+	<link rel="stylesheet" href="<%=WEBSITE_CSS_FILE_PATH%>plugin/popover/jquery.popSelect.min.css">
+
+	<!-- Touch Spin -->
+	<link rel="stylesheet" href="<%=WEBSITE_CSS_FILE_PATH%>plugin/touchspin/jquery.bootstrap-touchspin.min.css">
+	<link rel="stylesheet" href="<%=WEBSITE_CSS_FILE_PATH%>styles/developer.css">
+	<link rel="stylesheet" href="<%= WEBSITE_CSS_FILE_PATH%>plugin/timeline/css/style.css">
+</head>
+<script>
+	PAGE_LENGTH_MENU 			= [[10, 50, 100, 1000], [10, 50, 100, "All"]];
+	DEFAULT_DATE_TIME_FORMAT 	= '<%= DEFAULT_DATE_TIME_FORMAT%>';
+	WEBSITE_ADMIN_URL        	= "<%= WEBSITE_ADMIN_URL %>";
+</script>
+<body>
+	<div id="loaderShell">
+		<div id="loader">
+			<span class=""><%=WEBSITE_TITLE%></span>
+			<font></font>
+		</div>
+	</div>
+	<%-include(WEBSITE_ADMIN_MODULE_PATH+'elements/left_menu.html')%>
+	<div id="wrapper">
+		<div class="main-content">
+			<%-include(WEBSITE_ADMIN_MODULE_PATH+'elements/breadcrumbs.html')%>
+			<% if(flash_status	==	STATUS_SUCCESS){ %>
+				<div class="alert alert-success" role="alert">
+					<%=flash_success_message%>
+				</div>
+			<% }if(flash_status	==	STATUS_ERROR){%>
+					<div class="alert alert-danger" role="alert">
+					<%=flash_error_message%>
+				</div>
+				<%} %>	
+
+			<%-body%>	
+			<footer class="footer">
+				<ul class="list-inline">
+					<li><%=ADMIN_FOOTER_HEADING%></li>
+				</ul>
+			</footer>
+		</div>
+	</div>
+
+	<!-- Image preview -->
+	<div class="images_preview_container close_preview d-flex justify-content-center align-items-center" id="image-preview" onclick="closePreview(event)">
+		<div class="position-relative preview_container">
+			<img src="" alt="" id="preview_image" />
+			<span class="close_preview close_btn d-flex justify-content-center align-items-center cp">
+				<i class="ico ico-left fa fa-remove"></i>
+			</span>
+			<span class="preview_nav preview_prev d-flex justify-content-center align-items-center cp" id="preview_prev">
+				<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+					viewBox="0 0 477.175 477.175" style="enable-background:new 0 0 477.175 477.175;" xml:space="preserve">
+						<g>
+							<path d="M360.731,229.075l-225.1-225.1c-5.3-5.3-13.8-5.3-19.1,0s-5.3,13.8,0,19.1l215.5,215.5l-215.5,215.5
+								c-5.3,5.3-5.3,13.8,0,19.1c2.6,2.6,6.1,4,9.5,4c3.4,0,6.9-1.3,9.5-4l225.1-225.1C365.931,242.875,365.931,234.275,360.731,229.075z
+								"/>
+						</g>
+					</svg>
+			</span>
+			<span class="preview_nav preview_next d-flex justify-content-center align-items-center cp" id="preview_next">
+					<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+					viewBox="0 0 477.175 477.175" style="enable-background:new 0 0 477.175 477.175;" xml:space="preserve">
+						<g>
+							<path d="M360.731,229.075l-225.1-225.1c-5.3-5.3-13.8-5.3-19.1,0s-5.3,13.8,0,19.1l215.5,215.5l-215.5,215.5
+								c-5.3,5.3-5.3,13.8,0,19.1c2.6,2.6,6.1,4,9.5,4c3.4,0,6.9-1.3,9.5-4l225.1-225.1C365.931,242.875,365.931,234.275,360.731,229.075z
+								"/>
+						</g>
+					</svg>
+			</span>
+		</div>
+	</div>
+
+	<!-- Placed at the end of the document so the pages load faster -->
+	
+	<script src="<%=WEBSITE_JS_FILE_PATH%>scripts/jquery.min.js"></script>
+	<script src="<%=WEBSITE_JS_FILE_PATH%>scripts/modernizr.min.js"></script>
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/bootstrap/js/bootstrap.min.js"></script>
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/nprogress/nprogress.js"></script>
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/sweet-alert/sweetalert.min.js"></script>
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/waves/waves.min.js"></script>
+
+	<!-- Morris Chart -->
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/chart/morris/morris.min.js"></script>
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/chart/morris/raphael-min.js"></script>
+	<script src="<%=WEBSITE_JS_FILE_PATH%>scripts/chart.morris.init.min.js"></script>
+
+	<!-- Flot Chart -->
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/chart/plot/jquery.flot.min.js"></script>
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/chart/plot/jquery.flot.tooltip.min.js"></script>
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/chart/plot/jquery.flot.categories.min.js"></script>
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/chart/plot/jquery.flot.pie.min.js"></script>
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/chart/plot/jquery.flot.stack.min.js"></script>
+	<script src="<%=WEBSITE_JS_FILE_PATH%>scripts/chart.flot.init.min.js"></script>
+
+	<!-- Sparkline Chart -->
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/chart/sparkline/jquery.sparkline.min.js"></script>
+	<script src="<%=WEBSITE_JS_FILE_PATH%>scripts/chart.sparkline.init.min.js"></script>
+
+	<!-- FullCalendar -->
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/moment/moment.js"></script>
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/fullcalendar/fullcalendar.min.js"></script>
+	<script src="<%=WEBSITE_JS_FILE_PATH%>scripts/fullcalendar.init.js"></script>
+	
+	<!-- Form Wizard -->
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/form-wizard/prettify.js"></script>
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/form-wizard/jquery.bootstrap.wizard.min.js"></script>
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/jquery-validation/jquery.validate.min.js"></script>
+	<script src="<%=WEBSITE_JS_FILE_PATH%>scripts/form.wizard.init.min.js"></script>
+	
+	<!-- Data Tables -->
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/datatables/media/js/jquery.dataTables.min.js"></script>
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/datatables/media/js/dataTables.bootstrap.min.js"></script>
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/datatables/extensions/Responsive/js/dataTables.responsive.min.js"></script>
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/datatables/extensions/Responsive/js/responsive.bootstrap.min.js"></script>
+	<script src="<%=WEBSITE_JS_FILE_PATH%>scripts/datatables.demo.min.js"></script>
+	
+	<!-- Flex Datalist -->
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/flexdatalist/jquery.flexdatalist.min.js"></script>
+
+	<!-- Popover -->
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/popover/jquery.popSelect.min.js"></script>
+
+	<!-- Select2 -->
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/select2/js/select2.min.js"></script>
+
+	<!-- Multi Select -->
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/multiselect/multiselect.min.js"></script>
+
+	<!-- Touch Spin -->
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/touchspin/jquery.bootstrap-touchspin.min.js"></script>
+
+	<!-- Timepicker -->
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/timepicker/bootstrap-timepicker.min.js"></script>
+
+	<!-- Colorpicker -->
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/colorpicker/js/bootstrap-colorpicker.min.js"></script>
+
+	<!-- Datepicker -->
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/datepicker/js/bootstrap-datepicker.min.js"></script>
+
+	<!-- Moment -->
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/moment/moment.js"></script>
+
+	<!-- DateRangepicker -->
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/daterangepicker/daterangepicker.js"></script>
+
+	<!-- Maxlength -->
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/maxlength/bootstrap-maxlength.min.js"></script>
+
+	<!-- Demo Scripts -->
+	<script src="<%=WEBSITE_JS_FILE_PATH%>scripts/form.demo.min.js"></script>
+	
+	<!-- Jquery Knob -->
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/knob/jquery.knob.min.js"></script>
+	<script src="<%=WEBSITE_JS_FILE_PATH%>scripts/jquery.knob.init.js"></script>	
+
+	<!-- noUI Slider -->
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/noUIslider/nouislider.min.js"></script>
+	<script src="<%=WEBSITE_JS_FILE_PATH%>scripts/nouislider.init.min.js"></script>
+
+
+	<!-- Ion Ranger SLider -->
+	<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/ion-range-slider/js/ion.rangeSlider.min.js"></script>
+	<script src="<%=WEBSITE_JS_FILE_PATH%>scripts/ion.rangeSlider.init.min.js"></script>
+
+
+	<script src="<%=WEBSITE_JS_FILE_PATH%>scripts/jquery.form.js"></script>
+	<script src="<%=WEBSITE_JS_FILE_PATH%>scripts/jquery.serialize-object.js"></script>
+	<script src="<%=WEBSITE_JS_FILE_PATH%>scripts/main.min.js"></script>
+	
+	<!-- User defined js-->
+	<script src="<%=WEBSITE_JS_FILE_PATH%>scripts/jquery.form.js"></script>
+	<script src="<%=WEBSITE_JS_FILE_PATH%>custom.js"></script>
+
+	<script type='text/javascript'>
+		$(document).ready(function () { 
+		  var js__menu_close = localStorage.getItem("js__menu_close");
+		  if(js__menu_close != null){
+			$( ".js__menu_close" ).trigger( "click" );
+		  }else{
+			localStorage.setItem("js__menu_close", 'true');
+		  }
+		  $(".js__menu_close").click(function () {
+			localStorage.setItem("js__menu_close", true); 	
+		  });
+		})
+		var previewCounter=0;
+		function initPreview(i,classSelecter){
+			let index=Number(i);
+			previewCounter=index;
+			let next=document.getElementById('preview_next');
+			let prev=document.getElementById('preview_prev');
+			next.setAttribute('onclick','previewNext("'+classSelecter+'")')
+			prev.setAttribute('onclick','previewPrev("'+classSelecter+'")')
+			showGalery(index,classSelecter);
+		}
+		function showGalery(i,classSelecter){
+			let index=Number(i);
+			let allElements=document.getElementsByClassName(classSelecter);
+			let preview_container=document.getElementById('image-preview');
+			let preview = document.getElementById('preview_image');
+			preview.src=allElements[index].getAttribute('data-src');
+			preview_container.classList.add('active');
+			checkButtons(classSelecter);
+		}
+		function closePreview(event){
+			if(event.target.classList.contains("close_preview")){
+				let preview_container=document.getElementById('image-preview');
+				preview_container.classList.remove('active');
+			}
+		}
+		function previewNext(classSelecter){
+			previewCounter++;
+			if(previewCounter>=document.getElementsByClassName(classSelecter).length){
+				previewCounter=document.getElementsByClassName(classSelecter).length-1;
+			}
+			showGalery(previewCounter,classSelecter);
+		}
+		function previewPrev(classSelecter){
+			previewCounter--;
+			if(previewCounter<0){
+				previewCounter=0;
+			}
+			showGalery(previewCounter,classSelecter);
+		}
+		function checkButtons(classSelecter){
+			let next=document.getElementById('preview_next');
+			let prev=document.getElementById('preview_prev');
+			if(previewCounter>0){
+				prev.classList.remove('disabled');
+			}else{
+				prev.classList.add('disabled');
+			}
+			if(previewCounter==document.getElementsByClassName(classSelecter).length-1){
+				next.classList.add('disabled');
+			}else{
+				next.classList.remove('disabled');
+			}
+		}
+	</script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+	  var socket = io();
+	
+	//   document.getElementById('notification_button').addEventListener('click',function(){
+	// 	  const data = {
+	// 		message:"Hello",
+	// 		is_readonly:Boolean,
+	// 		go_to: "",
+	// 		params: "",
+	// 	  };
+	// 	  socket.emit('notify_superadmin',data);
+		  
+	//   })
+	//   io.on('connection', (socket) => {
+	// 	socket.on('notify_superadmin',(newData)=>{
+	// 	  })
+	//   });
+	var allNotifications = [];
+	  socket.on('notify_superadmin', function(data) {
+		allNotifications.unshift(data);
+		initNotifications();
+  	});
+	  let unreadNotifications=0;
+	  function initNotifications(){
+		  const button = document.getElementById('notification_button');
+		  const notificationList = document.getElementById('notification_list');
+		  notificationList.innerHTML="";
+		  allNotifications.forEach((item,i)=>{
+			const string = '<a href="javascript:void(0)">'+
+								'<span class="avatar bg-info"><i class="fa fa-bell"></i></span>'+
+								'<span class="name">'+item.title+'</span>'+
+								'<span class="desc">'+item.message+'</span>'+
+							'</a>';
+			const li = document.createElement('li');
+			if(!item.is_read){
+				li.setAttribute('onclick','notificationRead(this,"'+item._id+'")');
+				li.classList.add('unread');
+			}else{
+				li.setAttribute('onclick','window.location.href="<%=WEBSITE_ADMIN_URL%>'+item.go_to+'"');
+			}
+			if(item.is_readonly == 0){
+				li.setAttribute('data-goto','<%=WEBSITE_ADMIN_URL%>'+item.go_to);
+			}
+			li.innerHTML = string;
+			notificationList.appendChild(li);
+			
+			if(unreadNotifications>0){
+				button.querySelector('.notification_count').innerHTML = unreadNotifications;
+				button.querySelector('.notification_count').style.display='flex';
+			}else{
+				button.querySelector('.notification_count').style.display='none';
+			}
+		  });
+	  }
+	  function getGotoUrl(item){
+		if(item.is_readonly){
+			return "javascript:void(0)";
+		}else{
+			// return item.go_to;
+			return "javascript:void(0)";
+		}
+	  }
+	  
+	  function loadNotifications() {
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				allNotifications=(JSON.parse(this.response)).data;
+				unreadNotifications=JSON.parse(this.response).unreadNotifications
+				initNotifications();
+			}
+		};
+		xhttp.open("POST", "/admin/notification", true);
+		xhttp.send();
+	}
+	loadNotifications();
+
+	function notificationRead(elem,id){
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				loadNotifications();
+				if(elem.getAttribute('data-goto') && elem.getAttribute('data-goto')!=""){
+					window.location.href=elem.getAttribute('data-goto');
+				}
+			}
+		};
+		xhttp.open("POST", "/admin/notification/read", true);
+		xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+		xhttp.send(JSON.stringify({_id:id}));
+	}
+	</script>
+</body>
+</html>

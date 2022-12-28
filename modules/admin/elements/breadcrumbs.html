@@ -1,0 +1,36 @@
+<% if(Array.isArray(breadcrumbs)){%>
+<ol class="breadcrumb">
+  <%
+  breadcrumbs.map(result=>{ let breadcrumbName = (result.name) ? result.name
+  : ''; let breadcrumbUrl = (result.url) ? result.url : ''; let breadcrumbIcon =
+  (result.icon) ? result.icon : 'home'; let dynamicVariable = (typeof
+  dynamic_variable!= typeof undefined) ? dynamic_variable:''; let dynamicUrl =
+  (typeof dynamic_url!= typeof undefined) ? dynamic_url:''; breadcrumbName =
+  (dynamicVariable) ? breadcrumbName.replace('dynamic_variable',dynamicVariable)
+  : breadcrumbName; breadcrumbUrl = (dynamicVariable) ?
+  breadcrumbUrl.replace('{dynamic_variable}',dynamicUrl) : breadcrumbUrl;
+  if(breadcrumbUrl!=''){%>
+  <li class="active"><a href="<%= breadcrumbUrl%>"><%= breadcrumbName%></a></li>
+  <%}else{%>
+  <li><%= breadcrumbName%></li>
+  <%} %> <%});%>
+</ol>
+<%}%>
+
+<!-- <% if(Array.isArray(breadcrumbs)){%>
+  <ol class="breadcrumb">
+  <% breadcrumbs.map(result=>{ let breadcrumbName = (result.name) ? result.name
+  : ''; let breadcrumbUrl = (result.url) ? result.url : ''; let breadcrumbIcon =
+  (result.icon) ? result.icon : 'home'; let dynamicVariable = (typeof
+  dynamic_variable!= typeof undefined) ? dynamic_variable:''; let dynamicUrl =
+  (typeof dynamic_url!= typeof undefined) ? dynamic_url:''; breadcrumbName =
+  (dynamicVariable) ? breadcrumbName.replace('dynamic_variable',dynamicVariable)
+  : breadcrumbName; breadcrumbUrl = (dynamicVariable) ?
+  breadcrumbUrl.replace('{dynamic_variable}',dynamicUrl) : breadcrumbUrl;
+  if(breadcrumbUrl!=''){%>
+  <li class="active"><a href="<%= breadcrumbUrl%>"><%= breadcrumbName%></a></li>
+  <%}else{%>
+  <li><%= breadcrumbName%></li>
+  <%} %> <%});%>
+  </ol>
+  <%}%> -->

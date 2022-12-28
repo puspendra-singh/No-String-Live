@@ -1,0 +1,142 @@
+<div class="row small-spacing">
+  <div class="col-md-12 col-xs-12">
+    <div class="box-content">
+      <h4 class="box-title"><%=__('admin.system.add')%></h4>
+      <div class="dropdown js__drop_down">
+        <a href="/admin/units">
+          <button type="button" class="btn btn-sm btn-violet">
+            <i class="ico ico-left fa fa-step-backward"></i
+            ><%=__('admin.system.back')%>
+          </button>
+        </a>
+      </div>
+      <hr />
+      <div class="card-content">
+        <form
+          id="add-unit"
+          method="post"
+          name="add-user"
+          data-submit-btn-id="add-btn-unit"
+        >
+          <div class="row">
+            <div class="col-md-6 col-xs-12">
+              <div class="form-group">
+                <label for="parent_id"
+                  ><%= __('admin.units.select_parent')%></label
+                >
+                <select class="form-control" name="parent_id" id="parent_id">
+                  <option value="">Select parent</option>
+                  <% if(parent_list && parent_list.length>0){
+                  parent_list.map(records=>{%>
+                  <option value="<%= records._id%>"
+                    ><%= records.unit_name%></option
+                  >
+                  <% }); } %>
+                </select>
+                <span class="error" id="parent_id_error"></span>
+              </div>
+            </div>
+            <div class="col-md-6 col-xs-12">
+              <div class="form-group">
+                <label for="unit_name"
+                  ><%= __('admin.units.unit_name')%><span class="required">
+                    *</span
+                  ></label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  name="unit_name"
+                  id="unit_name"
+                />
+                <span class="error" id="unit_name_error"></span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-xs-12">
+              <div class="form-group">
+                <label for="path"
+                  ><%= __('admin.units.path')%><span class="required">
+                    *</span
+                  ></label
+                >
+                <input type="text" class="form-control" name="path" id="path" />
+                <span class="error" id="path_error"></span>
+              </div>
+            </div>
+            <div class="col-md-6 col-xs-12">
+              <div class="form-group">
+                <label for="group_path"
+                  ><%= __('admin.units.group_path')%><span class="required">
+                    *</span
+                  ></label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  name="group_path"
+                  id="group_path"
+                />
+                <span class="error" id="group_path_error"></span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-xs-12">
+              <div class="form-group">
+                <label for="icon"><%= __('admin.units.icon')%></label>
+                <input type="text" class="form-control" name="icon" id="icon" />
+                <span class="error" id="icon_error"></span>
+              </div>
+            </div>
+            <div class="col-md-6 col-xs-12">
+              <div class="form-group">
+                <label for="order"
+                  ><%= __('admin.units.order')%><span class="required">
+                    *</span
+                  ></label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  name="order"
+                  id="order"
+                />
+                <span class="error" id="order_error"></span>
+              </div>
+            </div>
+          </div>
+          <button
+            type="button"
+            id="add-btn-unit"
+            class="btn btn-primary btn-sm btn-submit"
+          >
+            <%= __('admin.system.submit')%><span></span>
+          </button>
+          <a href="/admin/units">
+            <button type="button" class="btn btn-danger btn-sm">
+              <%= __('admin.system.cancel')%>
+            </button>
+          </a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="<%=WEBSITE_JS_FILE_PATH%>scripts/jquery-3.0.0.js"></script>
+<script>
+  /** Submit Unit Detail*/
+  $(".btn-submit").click(function () {
+    var btnId = $(this).attr("id");
+    startTextLoading(btnId);
+
+    ajax_submit("add-unit", function (status, response) {
+      if (status) {
+        window.location.href = response.rediect_url;
+      } else {
+        stopTextLoading(btnId);
+      }
+    });
+  });
+</script>

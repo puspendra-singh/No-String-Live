@@ -1,0 +1,83 @@
+<div class="main-menu">
+	<header class="header">
+		<a href="#/" class="logo"><%=WEBSITE_TITLE%></a>
+		<button type="button" id= "js__menu_close" class="button-close fa fa-times js__menu_close"></button>
+		<div class="user">
+			<a href="#" class="avatar">
+				<img src="<%= USER_FILE_URL%><%=auth.image%>" class="admin_logo" alt="<%=auth.full_name%>">
+				<span class="status online"></span>
+			</a>
+			<h5 class="name">
+				<a href="#"><%=auth.full_name%></a>
+			</h5>
+			<h6 class="name">
+				<a href="/admin/users/edit_profile/<%=auth._id%>"><i class="fa fa-edit"></i></a>
+			</h6>
+		</div>
+	</header>
+	
+	<div class="content">
+		<div class="navigation">
+			<ul class="menu js__accordion">
+				
+				<%
+					userPermission.map((records, index)=>{
+						var isParentClass = (records.unitDetail && records.unitDetail.length>0) ? 'parent-item js__control' :'';
+						var groupPath     = (records.group_path) ? records.group_path :'';
+						%>
+							<li <%if(active_path== records.path || groupPath.search(active_path) > (-1) ){%>class="current"<%}%>>
+								<a <%if(!isParentClass){%>id="reset"<%}%> class="waves-effect  <%= isParentClass%>" href="<%= WEBSITE_ADMIN_URL+records.path%>">
+									<i class="menu-icon fa <%= records.icon%>"></i>
+									<span><%= records.unit_name%></span>
+									<% 
+									if(records.unitDetail && records.unitDetail.length>0){%>
+										<span class="menu-arrow fa fa-angle-down"></span>
+									<%}%>
+								</a>
+								<% 
+									if(records.unitDetail && records.unitDetail.length>0){%>
+										<ul class="sub-menu js__content">
+											<%
+												records.unitDetail.map((subMenu,index)=>{%>
+													
+													<li <%if(sub_active_path == subMenu.group_path || active_path == subMenu.path ){%>class="current"<%}%>>
+														<a id="reset" href="<%= WEBSITE_ADMIN_URL+subMenu.path%>"><%= subMenu.unit_name%></a>
+													</li>
+												<%});
+											%>	
+										</ul>
+									<%}%>
+							</li>
+						<%
+					});
+				%>
+			</ul>
+		</div>
+	</div> 
+</div>
+
+<div class="fixed-navbar">
+	<div class="pull-left">
+		<button type="button" class="menu-mobile-button glyphicon glyphicon-menu-hamburger js__menu_mobile"></button>	
+	</div>
+	<div class="pull-right">
+		<!-- <a href="#" class="ico-item mdi mdi-email notice-alarm js__toggle_open" data-target="#message-popup"></a> -->
+		<a href="javascript:void(0)" class="ico-item mdi mdi-bell notice-alarm js__toggle_open" id="notification_button" data-target="#notification-popup">
+			<span class="notification_count" style="display: none;"></span>
+		</a>
+		<a href="javascript:void(0)" data-href="<%= WEBSITE_ADMIN_URL%>user_logout" class="ico-item mdi mdi-logout confirm_box" data-confirm-heading="Are you sure " data-confirm-message="you want to logout ?"></a>
+	</div>
+</div>
+
+<!-- /#notification-popup -->
+<div class="ico-item">
+	<a href="#" class="ico-item mdi mdi-bell notice-alarm js__toggle_open" data-target="#notification-popup"></a>
+	<div id="notification-popup" class="notice-popup js__toggle" data-space="55">
+		<h2 class="popup-title">Notifications</h2>
+		<div class="content">
+			<ul class="notice-list" id="notification_list">
+			</ul>
+			<a href="<%= WEBSITE_ADMIN_URL%>notification/1" class="notice-read-more">See more messages</a>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,184 @@
+<div class="row small-spacing">
+  <div class="col-md-12 col-xs-12">
+    <div class="box-content">
+      <h4 class="box-title"><%=__('admin.system.shipping_address')%></h4>
+      <div class="dropdown js__drop_down">
+				<a href="<%= active_list_url%>/manage_address/<%= result[0]._id %>">
+					<button type="button" class="btn btn-sm btn-violet">
+						<i class="ico ico-left fa fa-step-backward"></i><%= __('admin.system.back')%>
+					</button>
+				</a>
+			</div>
+      <div class="card-content">
+        <form
+          id="edit-shipping-address"
+          method="post"
+          name="edit-shipping-address"
+          data-submit-btn-id="edit-btn-shipping-address"
+          enctype="multipart/form-data"
+        >
+        <div class="column">  
+          <div class="form-group">
+            <label for="country"
+              ><%= __('admin.user.country')%>
+              <span class="required">*</span>
+            </label>
+            <select
+              class="form-control country"
+              name="country"
+              id="country" 
+              >
+              <option value="<%= (result[0].country_id)	?	result[0].country_id:'';%>"><%= (result[0].country_name)	?	result[0].country_name:'';%></option>
+              <%- country_list %>
+            </select>
+            <span class="error" id="country_error"></span>
+          </div>
+        </div>
+        <div class="column">
+          <div class="form-group">
+            <label for="state"
+              ><%= __('admin.user.state')%>
+              <span class="required"> *</span>
+            </label>
+            <select 
+            class="form-control state" 
+            name="state" 
+            id="state" >
+              <option value="<%= (result[0].state_id)	?	result[0].state_id:'';%>"><%= (result[0].state_name)	?	result[0].state_name:'';%></option>
+             </select>
+            <span class="error" id="state_error"></span>
+          </div>
+        </div>
+        <div class="column">
+          <div class="form-group">
+            <label for="city"
+              ><%= __('admin.user.city')%>
+              <span class="required"> *</span>
+            </label>
+            <select 
+            class="form-control city" 
+            name="city" 
+            id="city">
+              <option value="<%= (result[0].city_id)	?	result[0].city_id:'';%>"><%= (result[0].city_name)	?	result[0].city_name:'';%></option>
+            </select>
+            <span class="error" id="city_error"></span>
+          </div>
+        </div>
+            <div class="column">
+              <div class="form-group">
+                <label for="street"
+                  ><%= __('admin.user.street')%>
+                  <span class="required"> *</span>
+                </label>
+                <input
+                  class="form-control street"
+                  name="street"
+                  id="street"
+                  value="<%= (result[0].shippingAddress)	?	result[0].shippingAddress.street:'';%>"
+                />
+                <span class="error" id="street_error"></span>
+              </div>
+            </div>
+            <div class="column">
+              <div class="form-group">
+                <label for="pincode"
+                  ><%= __('admin.user.pincode')%>
+                  <span class="required"> *</span>
+                </label>
+                <input
+                  class="form-control pincode"
+                  name="pincode"
+                  id="pincode"
+                  value="<%= (result[0].shippingAddress)	?	result[0].shippingAddress.pincode:'';%>"
+                />
+                <span class="error" id="pincode_error"></span>
+              </div>
+            </div>
+
+            
+          <button
+            type="button"
+            id="edit-btn-user"
+            class="btn btn-success btn-sm btn-submit"
+          >
+            <i class="ico ico-left fa fa-save"></i><%=
+            __('admin.system.submit')%>
+          </button>
+          <a href="/admin/dashboard">
+            <button type="button" class="btn btn-danger btn-sm">
+              <i class="ico ico-left fa fa-remove"></i><%=
+              __('admin.system.cancel')%>
+            </button>
+          </a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+  <script src="<%=WEBSITE_JS_FILE_PATH%>scripts/jquery-3.0.0.js"></script>
+  <!-- Select2 -->
+<link
+rel="stylesheet"
+href="<%= WEBSITE_JS_FILE_PATH%>plugin/select2/css/select2.min.css"
+/>
+<script src="<%= WEBSITE_JS_FILE_PATH%>plugin/select2/js/select2.min.js"></script>
+<!-- Dropify -->
+<link rel="stylesheet" href="<%= WEBSITE_JS_FILE_PATH%>plugin/dropify/css/dropify.min.css"/>
+<script src="<%= WEBSITE_JS_FILE_PATH%>plugin/dropify/js/dropify.min.js"></script>
+<script src="<%= WEBSITE_JS_FILE_PATH%>scripts/fileUpload.demo.min.js"></script>
+<script>
+    /** Submit User Detail*/
+    $(".btn-submit").click(function () {
+      var btnId = $(this).attr("id");
+      startTextLoading(btnId);
+      submit_multipart_form("edit-shipping-address", function (status, response) {
+        if (status) {
+          window.location.href = response.rediect_url;
+        } else {
+          stopTextLoading(btnId);
+        }
+      });
+    });
+
+    
+    /** Get Cities */
+  $(document).ready(function () {
+    $("#country").on("change", function (e) {
+      var countryId = e.target.value;
+      getStatesList(countryId);
+    });
+  });
+
+  /** Get States */
+  $(document).ready(function () {
+    $("#state").on("change", function (e) {
+      var countryId = $("#country").find(":selected").val();
+      var stateId = e.target.value;
+      getCitiesList(countryId, stateId);
+    });
+  });
+
+  $(document).ready(function(){
+    $("#country").select2({
+    placeholder: "Select Country",
+    allowClear: true
+    } );
+  });
+
+  $(document).ready(function(){
+    $("#state").select2( {
+    placeholder: "Select State",
+    allowClear: true
+    } );
+
+  })
+
+  $(document).ready(function(){
+    $("#city").select2( {
+    placeholder: "Select City",
+    allowClear: true
+    } );
+
+  })
+  
+  </script>

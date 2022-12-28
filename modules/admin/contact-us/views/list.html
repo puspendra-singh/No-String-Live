@@ -1,0 +1,122 @@
+<div class="row small-spacing">
+	<!--- Search Start-->
+    <div class="col-lg-12 col-md-12 col-xs-12">
+		<div class="box-content card bordered-all primary js__card">
+			<h4 class="box-title bg-primary with-control">
+				<%= __("admin.system.search")%>
+				<span class="controls">
+					<button type="button" class="control fa fa-minus js__card_minus"></button>
+				</span>
+			</h4>
+			<div class="card-content js__card_content">
+				<form id="searchForm" name="searchForm" >
+					<div class="row">
+						<div class="col-md-3 col-xs-12">
+							<div class="form-group">
+								<input type="hidden" name="from_date" id="from_date"/>
+								<input type="hidden" name="to_date" id="to_date"/>
+								<input class="form-control input-daterange-datepicker" id ="daterange" type="text" name="daterange" placeholder="<%= __('admin.feedback.search_by_date')%>">
+							</div>
+						</div>	
+						<div class="col-md-3 col-xs-12">
+							<div class="form-group">
+								<input type="text" class="form-control" name="subject" onkeyUp="searchDatatable(1)" id="column_number_1" placeholder="<%= __('admin.feedback.search_by_subject')%>">
+							</div>
+						</div>
+						<div class="col-md-3 col-xs-12">
+							<button type="button" id="reset" class="btn btn-md waves-effect btn-danger">
+							  <i class="ico ico-left fa fa-refresh"></i>
+							  <%= __("admin.system.reset")%>
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!--- Search End-->
+
+	<!--- Datatable Start-->
+	<div class="col-xs-12">
+		<div class="box-content">
+			<h4 class="box-title"><%=__('admin.contactus.contactus')%></h4>
+			<div class="dropdown js__drop_down"></div>
+			<table id="data-table" class="table table-striped table-bordered display" style="width:100%">
+				<thead>
+					<tr>
+						<th><%= __('admin.user.name')%></th>
+						<th><%=__('admin.user.email')%></th>
+						<th><%=__('admin.system.description')%></th>
+						<th><%=__('admin.system.created')%></th>						
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</div>
+</div>
+<!-- DateRangepicker -->
+<link rel="stylesheet" href="<%=WEBSITE_CSS_FILE_PATH%>plugin/daterangepicker/daterangepicker.css">
+
+<script src="<%=WEBSITE_JS_FILE_PATH%>scripts/jquery-3.0.0.js"></script>
+<script>
+	var dataTable 	="";
+	$(document).ready(()=>{
+		dataTable = $('#data-table').DataTable({
+			"bStateSave"	: true,
+			"fnStateSave"	: function (oSettings, oData) {
+				localStorage.setItem( 'DataTables', JSON.stringify(oData) );
+			},
+			"fnStateLoad"	: function (oSettings) {
+				return JSON.parse( localStorage.getItem('DataTables') );
+			},
+			"dom"		: 'ltrip',
+            "serverSide": true,
+            "scrollX"	: true,
+            "sorting"	: [[3,"desc"]],
+            "lengthMenu": PAGE_LENGTH_MENU,
+            "processing": true,
+			"columns": [
+				{"data" : 'name'},
+				{"data" : 'email'},	
+				{"data" : 'description'},	
+				{
+					"data" : 'created',
+					render : (created=>{
+						return moment(created).format(DEFAULT_DATE_TIME_FORMAT);
+					})
+				},
+				
+            ],
+            "ajax": {
+				"type" 	    : "POST",
+				"url"		: "<%= active_list_url%>",
+				"data"      : (d=>{
+					d.fromDate  = $("#from_date").val();
+					d.toDate  	= $("#to_date").val();
+				}),
+				"dataSrc"	: (res=>{
+					return res.data;
+				})
+			}	
+			
+		});	
+	});
+
+	/** Function to search in data table */
+	searchDatatable = (columnNumber=>{
+		var data = $('#column_number_'+columnNumber).val();
+		dataTable.search(data,columnNumber).draw();
+	});
+
+	/** Function to searching in data table by date range*/
+	$(function() {
+		$('input[name="daterange"]').daterangepicker({
+			opens: 'right'
+		}, function(start, end, label) {
+			$("#from_date").val(start);
+			$("#to_date").val(end);
+			dataTable.draw();
+		});
+	});
+</script>
+<script src="<%=WEBSITE_JS_FILE_PATH%>datatable_state_storage.js"></script>

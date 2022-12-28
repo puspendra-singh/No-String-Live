@@ -1,0 +1,56 @@
+<% var result = (typeof result != typeof undefined && result) ? result :{};%>
+<div class="row small-spacing">
+  <div class="col-md-12 col-xs-12">
+    <div class="box-content">
+      <h4 class="box-title">View Detail</h4>
+      <div class="dropdown js__drop_down">
+        <a href="/admin/masters/<%=key%>">
+          <button type="button" class="btn btn-sm btn-bordered btn-violet">
+            <i class="ico ico-left fa fa-step-backward"></i>Back
+          </button>
+        </a>
+      </div>
+      <hr />
+      <div class="card-content">
+        <div class="col-xs-12">
+          <div class="box-content">
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <tbody>
+                  <tr>
+                    <th scope="row">Name</th>
+                    <td><%= (result.name) ? result.name :'N/A';%></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Status</th>
+                    <td>
+                      <% var labelClass = (result.is_active && result.is_active
+                      == ACTIVE) ? 'bg-success':'bg-warning'; var labelText =
+                      (result.is_active && result.is_active == ACTIVE) ?
+                      'Active':'Inactive'; %>
+                      <span class="notice text-white <%= labelClass%>"
+                        ><%= labelText%></span
+                      >
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Created</th>
+                    <td>
+                      <span
+                        class="setDateTimeFormat"
+                        data-time-format="<%= DEFAULT_DATE_TIME_FORMAT%>"
+                        data-time="<%= (result.created)	?	result.created	:new Date();%>"
+                      ></span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <!-- /.box-content -->
+        </div>
+        <!-- /.col-xs-12 -->
+      </div>
+    </div>
+  </div>
+</div>

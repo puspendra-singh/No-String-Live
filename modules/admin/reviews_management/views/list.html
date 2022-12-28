@@ -1,0 +1,241 @@
+<div class="row small-spacing">
+    <div class="col-lg-12 col-md-12 col-xs-12">
+		<div class="box-content card bordered-all primary js__card">
+			<h4 class="box-title bg-primary with-control">
+				Search
+				<span class="controls">
+					<button type="button" class="control fa fa-minus js__card_minus"></button>
+				</span>
+			</h4>
+			<div class="card-content js__card_content">
+				<form id="searchForm" name="searchForm" >
+					<div class="row">
+						<div class="col-md-3 col-xs-12">
+							<div class="form-group">
+								<input type="hidden" name="from_date" id="from_date"/>
+								<input type="hidden" name="to_date" id="to_date"/>
+								<input class="form-control input-daterange-datepicker" id ="daterange" type="text" name="daterange" placeholder="<%= __('admin.user.search_by_created_date')%>">
+							</div>
+						</div>	
+						<!-- <div class="col-md-3 col-xs-12">
+							<div class="form-group">
+								<input type="text" class="form-control" name="product_title" onkeyUp="searchDatatable(2)" id="column_number_2" placeholder="<%= __('admin.user.search_by_name')%>">
+							</div>
+						</div> -->
+						
+						
+						<!-- <div class="col-md-3 col-xs-12">
+							<div class="form-group">
+								<select class="form-control" name="status" id="search_by_status" class="search_by_status">
+									<option value=""><%= __('admin.search.search_by_status')%></option>
+									<%
+										if(typeof USER_STATUS_SEARCH_DROPDOWN!== typeof undefined && USER_STATUS_SEARCH_DROPDOWN.length > 0){
+											USER_STATUS_SEARCH_DROPDOWN.map(searchStatus=>{
+												var selectedFlag    = (typeof searchStatus.status_type !== typeof undefined && searchStatus.status_type  && searchStatus.status_type == statusType) ? "selected" : "";
+												%>
+												<option value="<%=searchStatus.status_id%>"  <%=selectedFlag%>><%=searchStatus.status_name%></option>    
+											<%      
+											});
+										} %>
+								</select>
+							</div>
+						</div> -->
+						<div class="col-md-3 col-xs-12">
+							<button type="button" id="reset" class="btn btn-md waves-effect btn-danger">
+							  <i class="ico ico-left fa fa-refresh"></i>
+							  <%= __("admin.system.reset")%>
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-12">
+		<div class="box-content">
+			<h4 class="box-title"><%=__('admin.system.reviews')%></h4>
+			
+			<table id="data-table" class="table table-striped table-bordered display" style="width:100%">
+				<thead>
+					<tr>
+						<th><%= __('admin.review.rating')%></th>
+						<th><%=__('admin.review.title')%></th>
+						<th><%=__('admin.review.description')%></th>
+						<th><%=__('admin.review.seller_name')%></th>
+						<th><%=__('admin.review.buyer_name')%></th>
+						<th><%=__('admin.review.product_name')%></th>
+						<th><%=__('admin.system.status')%></th>
+						<th><%=__('admin.system.created')%></th>
+						<th><%=__('admin.system.action')%></th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</div>
+</div>
+<!-- DateRangepicker -->
+<link rel="stylesheet" href="<%=WEBSITE_CSS_FILE_PATH%>plugin/daterangepicker/daterangepicker.css">
+
+<!-- Ion Range SLider -->
+<link rel="stylesheet" href="<%=WEBSITE_CSS_FILE_PATH%>plugin/ion-range-slider/css/ion.rangeSlider.css">
+<link rel="stylesheet" href="<%=WEBSITE_CSS_FILE_PATH%>plugin/ion-range-slider/css/ion.rangeSlider.skinFlat.css">
+
+<script src="<%=WEBSITE_JS_FILE_PATH%>scripts/jquery-3.0.0.js"></script>
+
+<!-- Ion Ranger SLider -->
+<script src="<%=WEBSITE_JS_FILE_PATH%>plugin/ion-range-slider/js/ion.rangeSlider.min.js"></script>
+<script src="<%=WEBSITE_JS_FILE_PATH%>scripts/ion.rangeSlider.init.min.js"></script>
+
+<!-- Select2 -->
+<link rel="stylesheet" href="<%= WEBSITE_JS_FILE_PATH%>plugin/select2/css/select2.min.css">
+<script src="<%= WEBSITE_JS_FILE_PATH%>plugin/select2/js/select2.min.js"></script>
+<script>
+	var dataTable 	="";
+	$(document).ready(()=>{
+		dataTable = $('#data-table').DataTable({
+			"bStateSave"	: true,
+			"fnStateSave"	: function (oSettings, oData) {
+				localStorage.setItem( 'DataTables', JSON.stringify(oData) );
+			},
+			"fnStateLoad"	: function (oSettings) {
+				return JSON.parse( localStorage.getItem('DataTables') );
+			},
+			"dom"		: 'ltrip',
+            "serverSide": true,
+            "scrollX"	: true,
+            "sorting"	: [[7,"desc"]],
+            "lengthMenu": PAGE_LENGTH_MENU,
+            "processing": true,
+			"columns": [
+				{
+					"data" : "rating",
+					"orderable" : false,
+					"name": "rating",
+				}, 
+				{
+					"data" : "review_title",
+					"orderable" : false,
+					"name": "review_title",
+				}, 
+				{
+					"data" : "review_description",
+					"orderable" : false,
+					"name": "review_description",
+				}, 
+
+				{
+					"data" :'sellerDetails',
+					"orderable" : false,
+					"name": "sellerDetails",
+					"render" : (result=>{
+						let linkTag='<a href="<%=WEBSITE_ADMIN_URL%>users/view/'+result._id+'" class="view_order_links" target="_blank">'+(result.full_name ? result.full_name : '')+'</a>'
+						return linkTag;
+					})
+				}, 
+				{
+					"data" :'buyerDetails',
+					"orderable" : false,
+					"name": "buyerDetails",
+					"render" : (result=>{
+						let linkTag='<a href="<%=WEBSITE_ADMIN_URL%>users/view/'+result._id+'" class="view_order_links" target="_blank">'+(result.full_name ? result.full_name : '')+'</a>'
+						return linkTag;
+					})
+				}, 
+				{
+					"data" :'productDetails',
+					"orderable" : false,
+					"name": "productDetails",
+					"render" : (result=>{
+						let linkTag='<a href="<%=WEBSITE_ADMIN_URL%>products/view/'+result._id+'" class="view_order_links" target="_blank">'+(result.product_title ? result.product_title : '')+'</a>'
+						return linkTag;
+					})
+				}, 
+			
+			
+				{
+					data: 'is_active',
+					name: 'is_active',
+					"orderable" : false,
+					render:  (is_active=> {
+						var labelClass 	= is_active == "<%=ACTIVE%>" ? "bg-success" : "bg-warning";
+						var labelText 	= is_active == "<%=ACTIVE%>" ? "Active" : "Inactive";
+						return ('<span class="notice text-white ' +labelClass +'">' +labelText +"</span>");
+					})
+				},	
+				{
+					"data" : 'created',
+					render : (created=>{
+						return moment(created).format(DEFAULT_DATE_TIME_FORMAT);
+					})
+				},  
+				{
+					"data"      : {},
+					"orderable" : false,
+					"render"    : (result=>{
+						var reviewId			= (result) ? result._id :'';
+						var status			= (result) ? result.is_active :'';
+						var phoneVerified	= (result.mobile_verified == '<%=VERIFIED%>') ? "hide" :"show"; 
+						var emailVerified	= (result.email_verified == '<%=VERIFIED%>') ? "hide" :"show"; 
+						var statusText	= (result.is_active && result.is_active == '<%=ACTIVE%>') ? '<%=__("admin.system.deactivate")%>' :'<%=__("admin.system.activate")%>'; 
+						var html    = 
+								'<div class="input-group">'+
+									'<button type="button" class="btn btn-default btn-xs text-black no-border dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span><%=__("admin.system.action")%></span> <span class="fa fa-caret-down"></span> <span class="sr-only">Toggle Dropdown</span> </button>'+
+									'<ul class="dropdown-menu dropdown-menu-right">'+
+										'<li><a href="<%=active_list_url%>/edit/'+reviewId+'"><%=__("admin.system.edit")%></a></li>'+
+										// '<li><a href="<%=active_list_url%>/view/'+orderId+'"><%=__("admin.system.view")%></a></li>'+
+										'<li><a class="confirm_box" href="javascript:void(0)" data-href="<%=active_list_url%>/update_status/'+reviewId+'/'+status+'" data-confirm-heading="<%=__("admin.system.are_you_sure")%>" data-confirm-message="<%=__("admin.system.you_want_to_change_status")%>" >'+statusText+'</a></li>'+ 
+										'<li><a class="confirm_box" href="javascript:void(0)" data-href="<%=active_list_url%>/delete/'+reviewId+'" data-confirm-heading="<%=__("admin.system.are_you_sure")%>" data-confirm-message="<%=__("admin.user.loader_you_want_to_delete_this_review")%>"><%=__("admin.system.delete")%></a></li>'+  
+									'</ul>'+
+							'</div>'
+						return html;
+					})
+				}
+            ],
+            "ajax": {
+				"type" 	    : "POST",
+				"url"		: "<%= active_list_url%>",
+				"data"      : (d=>{
+					d.fromDate  = $("#from_date").val();
+					d.toDate  	= $("#to_date").val();
+					d.order_status =  $("#search_by_status").val();
+				}),
+				"dataSrc"	: (res=>{
+					return res.data;
+				})
+			}	
+			
+		});	
+		/**
+		* Search by status
+		*
+		
+		* @param null
+		*
+		* @return void
+		*/
+		$(document).on("change","#search_by_status",function(){
+			dataTable.draw();
+		});
+	});
+
+	/** Function to search in data table */
+	function  searchDatatable(columnNumber){
+		
+		var data = $('#column_number_'+columnNumber).val();
+		dataTable.search(data,columnNumber).draw();
+	};
+
+
+	/** Function to searching in data table by date range*/
+	$(function() {
+		$('input[name="daterange"]').daterangepicker({
+			opens: 'right'
+		}, function(start, end, label) {
+			$("#from_date").val(start);
+			$("#to_date").val(end);
+			$("#daterange").val(start.format('MM-DD-YYYY')+" "+end.format('MM-DD-YYYY'));
+			dataTable.draw();
+		});
+	});
+</script>
+<script src="<%=WEBSITE_JS_FILE_PATH%>datatable_state_storage.js"></script>

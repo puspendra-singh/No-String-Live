@@ -1,0 +1,143 @@
+
+<div class="row small-spacing">
+	<div class="col-md-12 col-xs-12">
+	  <div class="box-content">
+		<h4 class="box-title"><%=__('admin.system.add')%></h4>
+		<div class="dropdown js__drop_down">
+		  <a href="<%= active_list_url%>">
+			<button type="button" class="btn btn-sm btn-violet">
+			  <i class="ico ico-left fa fa-step-backward"></i
+			  ><%=__('admin.system.back')%>
+			</button>
+		  </a>
+		</div>
+		<hr />
+		<div class="card-content">
+			<form id="add-setting" data-submit-btn-id="setting-add-btn-id" method="post" class="on_click_submit" role="form">
+			<div class="row">
+				<div class="col-md-12 col-xs-12">
+				  <div class="form-group">
+					<label for="title"
+					  ><%= __('admin.slider.title')%>
+					  <span class="required">*</span></label
+					>
+					<input name="title" id="title" type="text" class="form-control"/>
+					<span class="error" id="title_error"></span>
+				  </div>
+				</div>
+				<div class="col-md-12 col-xs-12">
+				  <div class="form-group">
+					<label for="key_value"><%= __('admin.setting.key_value')%> </label>
+					<input name="key_value" id="key_value" type="text" class="form-control"/>
+					<strong>Ex. <%=__("admin.setting.key_value_example")%></strong>
+					<span class="error" id="key_value_error"></span>
+				  </div>
+				</div>
+				<div class="col-md-12 col-xs-12">
+					<div class="form-group">
+					  	<label for="link_page"><%= __('admin.setting.input_type')%></label>
+					  	<select class="form-control show-tick"  name="input_type" id="input_type">
+						<option value=""><%=__("admin.setting.select_input_type");%></option>
+					   <% 	if(SETTING_INPUT_TYPE_DROPDOWN && SETTING_INPUT_TYPE_DROPDOWN.length > 0){
+								SETTING_INPUT_TYPE_DROPDOWN.map(records=>{
+									if(records && typeof records.input_id !== typeof undefined && typeof records.input_name !== typeof undefined){ %>
+										<option value="<%=records.input_id%>"><%=records.input_name%></option>
+							<% 		}
+								});
+							} %>
+						</select>
+					  	<span class="error" id="link_page_error"></span>
+					</div>
+				</div>
+				<div class="col-md-12 col-xs-12">
+					<div class="form-group">
+						<label for="validate_type"><%= __('admin.setting.validate_type')%></label>
+						<select class="form-control show-tick"  name="validate_type" id="validate_type">
+							<option value=""><%=__("admin.setting.select_validate_type");%></option>
+							<% 	if(SETTINGS_VALIDATE_TYPE_DROPDOWN && SETTINGS_VALIDATE_TYPE_DROPDOWN.length > 0){
+									SETTINGS_VALIDATE_TYPE_DROPDOWN.map(records=>{
+										if(records && typeof records.input_id !== typeof undefined && typeof records.input_name !== typeof undefined){ %>
+											<option value="<%=records.input_id%>"><%=records.input_name%></option>
+								<% 		}
+									});
+								} %>
+						</select>
+						<span class="error" id="validate_type_error"></span>
+					</div>
+				</div>
+				<div class="col-sm-12">
+					<div class="form-group">
+						<label for="value" class="control-label"><%= __('admin.setting.values'); %><span class="required"> *</span> </label>
+						<input name="value" id="value" type="text" class="form-control"/>
+						<span id="value_error" class="error"></span>
+					</div>
+				</div>
+				<div class="col-sm-12">
+					<div class="form-group">
+						<label for="order" class="control-label"><%= __('admin.setting.order'); %> </label>
+						<input name="order" id="order" type="text" class="form-control"/>
+						<span id="order_error" class="error"></span>
+					</div>
+				</div>
+				<div class="col-sm-12">
+					<div class="form-group">
+						<div class="switch success form-group">	
+							<input type="checkbox" value="1" name="required" id="switch-3"  />
+							<label for="switch-3">Required</label>
+						</div>
+						<span id="required_error" class="error"></span>
+					</div>
+				</div>
+				<div class="col-sm-12">
+					<div class="form-group">
+						<div class="switch success form-group">	
+							<input type="checkbox" value="1" name="editable" id="switch-4"  />
+							<label for="switch-4">Editable</label>
+						</div>
+						<span id="editable_error" class="error"></span>
+					</div>
+				</div>
+				
+			  	<div class="col-md-12 col-xs-12">
+					<div class="col-md-12 col-xs-12">
+					<button type="button" id="setting-add-btn-id" class="btn btn-success btn-sm btn-submit">
+						<i class="ico ico-left fa fa-save"></i> <%= __('admin.system.submit')%>
+						</button>
+						<a href="<%= active_list_url%>" type="button" class="btn btn-danger btn-sm">
+							<i class="ico ico-left fa fa-remove"></i><%=__('admin.system.cancel')%>
+						</a>
+					</div>
+			  	</div>
+			</div>
+		  </form>
+		</div>
+	  </div>
+	</div>
+  </div>
+
+
+
+
+
+<script src="<%=WEBSITE_JS_FILE_PATH%>scripts/jquery-3.0.0.js"></script>
+
+<!-- Select2 -->
+<link rel="stylesheet" href="<%= WEBSITE_JS_FILE_PATH%>plugin/select2/css/select2.min.css">
+<script src="<%= WEBSITE_JS_FILE_PATH%>plugin/select2/js/select2.min.js"></script>
+
+<script type="text/javascript">
+	/**
+	 * Function to submit form
+	 */
+	$(".btn-submit").click(function(){
+		var btnId = $(this).attr("id");
+		startTextLoading(btnId);
+		ajax_submit("add-setting",function(status,response){
+			if(status){
+				window.location.href = response.rediect_url;
+			}else{
+				stopTextLoading(btnId);
+			}
+		});
+	});
+</script>

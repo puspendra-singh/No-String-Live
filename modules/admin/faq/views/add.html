@@ -1,0 +1,85 @@
+<div class="row small-spacing">
+  <div class="col-md-12 col-xs-12">
+    <div class="box-content">
+      <h4 class="box-title"><%=__('admin.system.add')%></h4>
+      <div class="dropdown js__drop_down">
+        <a href="<%= active_list_url%>">
+          <button type="button" class="btn btn-sm btn-violet">
+            <i class="ico ico-left fa fa-step-backward"></i
+            ><%=__('admin.system.back')%>
+          </button>
+        </a>
+      </div>
+      <hr />
+      <div class="card-content">
+        <form id="add-faq" method="post" name="add-faq" class="on_click_submit" data-submit-btn-id="add-btn-faq">
+          <div class="row">
+            <div class="col-md-12 col-xs-12">
+              <div class="form-group">
+                <label for="question"><%= __('admin.faq.question')%> <span class="required" >*</span></label>
+                <input type="text" class="form-control" name="question" id="question" />
+                <span class="error" id="question_error"></span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 col-xs-12">
+              <div class="form-group">
+                <label for="category"><%= __('admin.faq.category')%> <span class="required" >*</span></label>
+                <select
+                  type="text"
+                  class="form-control"
+                  name="category"
+                  id="category"
+                  >
+                  <option value="">Select</option>
+                  <%-faq_category_list%>
+                </select>
+                <span class="error" id="category_error"></span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 col-xs-12">
+              <div class="form-group">
+                  <label for="answer"><%= __('admin.system.answer')%> <span class="required" >*</span></label>
+                  <textarea class="form-control" name="answer" id="answer" ></textarea>
+                <span class="error" id="answer_error"></span>
+              </div>
+            </div>
+          </div>
+          <button type="button" id="add-btn-faq" class="btn btn-success btn-sm btn-submit"><i class="ico ico-left fa fa-save"></i> <%= __('admin.system.submit')%></button>
+          <a href="<%= active_list_url%>" type="button" class="btn btn-danger btn-sm"><i class="ico ico-left fa fa-remove"></i><%= __('admin.system.cancel')%></a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script type='text/javascript' src="<%=WEBSITE_JS_FILE_PATH%>scripts/jquery.min.js"></script>
+<script type='text/javascript' src="<%=WEBSITE_JS_FILE_PATH%>plugin/ckeditor/ckeditor.js"></script>
+<link rel="stylesheet" href="<%= WEBSITE_CSS_FILE_PATH%>plugin/select2/css/select2.min.css" />
+<script type='text/javascript'  src="<%= WEBSITE_JS_FILE_PATH%>plugin/select2/js/select2.min.js"></script>
+<script type='text/javascript'>
+  CKEDITOR.replace('answer');
+
+  /** Submit faq detail*/
+  $(document).ready(function(){
+    $(".btn-submit").click(function () {
+    $('#answer').val(CKEDITOR.instances['answer'].getData());
+
+    var btnId = $(this).attr("id");
+    startTextLoading(btnId);
+    ajax_submit("add-faq", function (status, response) {
+        if (status) {
+          window.location.href = response.rediect_url;
+        } else {
+          stopTextLoading(btnId);
+        }
+      });
+    });
+
+    $("#category").select2( {
+      allowClear: false
+    })
+  })
+</script>

@@ -1,0 +1,153 @@
+<div class="row small-spacing">
+  <div class="col-md-12 col-xs-12">
+    <div class="box-content">
+      <h4 class="box-title"><%=__('admin.system.edit')%></h4>
+      <div class="dropdown js__drop_down">
+        <a href="<%= active_list_url%>">
+          <button type="button" class="btn btn-sm btn-violet">
+            <i class="ico ico-left fa fa-step-backward"></i
+            ><%=__('admin.system.back')%>
+          </button>
+        </a>
+      </div>
+      <hr />
+      <div class="card-content">
+        <form
+          id="edit-slider"
+          method="post"
+          name="edit-slider"
+          class="on_click_submit"
+          data-submit-btn-id="edit-btn-slider"
+        >
+        <div class="row">
+            <div class="col-md-6 col-xs-6">
+              <div class="col-md-12 col-xs-12">
+                <div class="form-group">
+                  <label for="name"
+                    ><%= __('admin.system.name')%>
+                    <span class="required">*</span></label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="name"
+                    id="name"
+                    value="<%= (result.name ) ? result.name : ''%>"
+                  />
+                  <span class="error" id="name_error"></span>
+                </div>
+              </div>
+              <div class="col-md-12 col-xs-12">
+                <div class="form-group">
+                  <label for="about"><%= __('admin.testimonials.about')%> <span class="required">*</span></label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="about"
+                    id="about"
+                    value="<%= (result.about ) ? result.about : ''%>"
+                  />
+                  <span class="error" id="about_error"></span>
+                </div>
+              </div>
+              <div class="col-md-12 col-xs-12">
+                  <div class="form-group">
+                    <label for="rating"
+                      ><%= __('admin.testimonials.rating')%>
+                      <span class="required">*</span></label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="rating"
+                      id="rating"
+                      value="<%= (result.rating ) ? result.rating : ''%>"
+                    />
+                    <span class="error" id="rating_error"></span>
+                  </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xs-6">
+              <div class="col-md-12 col-xs-12">
+                <div class="form-group">
+                  <div class="upload-btn-wrapper">
+                      <label for="Image"
+                      ><%= __('admin.system.image')%>
+                      </label
+                    >
+                      <input name="image" type="file" id="input-file-now-custom-1" class="dropify" data-default-file="<%= result.full_image_path%>" />
+                      <input type="hidden" class="form-control" name="old_image" value="<%= (result.image)	?	result.image:'';%>" />
+                      <span class="error" id="image_error"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 col-xs-12">
+              <div class="col-md-12 col-xs-12">
+                <div class="form-group">
+                  <label for="description"
+                    ><%= __('admin.system.description')%>
+                    <span class="required">*</span></label
+                  >
+                  <textarea
+                    class="form-control ckeditor"
+                    name="description"
+                    id="description"
+                  ><%= (result.description ) ? result.description : ''%></textarea>
+                  <span class="error" id="description_error"></span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 col-xs-12">
+              <div class="col-md-12 col-xs-12">
+                <button
+                type="button"
+                id="add-btn-slider"
+                class="btn btn-success btn-sm btn-submit"
+              >
+                <i class="ico ico-left fa fa-save"></i> <%=
+                __('admin.system.submit')%>
+              </button>
+              <a
+                href="<%= active_list_url%>"
+                type="button"
+                class="btn btn-danger btn-sm"
+                ><i class="ico ico-left fa fa-remove"></i><%=
+                __('admin.system.cancel')%></a
+              >
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!--- Start JS -->
+<script type="text/javascript" src="<%=WEBSITE_JS_FILE_PATH%>scripts/jquery.min.js"></script>
+
+<!-- CK editor -->
+<script type='text/javascript' src="<%=WEBSITE_JS_FILE_PATH%>plugin/ckeditor/ckeditor.js"></script>
+
+<!-- Dropify -->
+<link rel="stylesheet" href="<%= WEBSITE_JS_FILE_PATH%>plugin/dropify/css/dropify.min.css">
+<script src="<%= WEBSITE_JS_FILE_PATH%>plugin/dropify/js/dropify.min.js"></script>
+<script src="<%= WEBSITE_JS_FILE_PATH%>scripts/fileUpload.demo.min.js"></script>
+  
+<script type="text/javascript">
+
+  /** Submit Slider detail*/
+  $(".btn-submit").click(function () {
+    var btnId = $(this).attr("id");
+    updateCkeditorValue();
+    startTextLoading(btnId);
+    ajax_submit("edit-slider", function (status, response) {
+      if (status) {
+        window.location.href = response.rediect_url;
+      } else {
+        stopTextLoading(btnId);
+      }
+    });
+  });
+</script>
+<!--- End JS -->

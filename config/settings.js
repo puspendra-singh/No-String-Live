@@ -1,0 +1,1 @@
+{"Email.user_email":"testbydev.an@gmail.com","Email.password":"Anuj@1234","Email.user_name":"testbydev.an@gmail.com","Email.port":"465","Email.host":"ssl://smtp.gmail.com"}

@@ -1,0 +1,196 @@
+<div class="row small-spacing">
+	<!--- Search Start-->
+    <div class="col-lg-12 col-md-12 col-xs-12">
+		<div class="box-content card bordered-all primary js__card">
+			<h4 class="box-title bg-primary with-control">
+				<%= __("admin.system.search")%>
+				<span class="controls">
+					<button type="button" class="control fa fa-minus js__card_minus"></button>
+				</span>
+			</h4>
+			<div class="card-content js__card_content">
+				<form id="searchForm" name="searchForm" >
+					<div class="row">
+						<div class="col-md-3 col-xs-12">
+							<div class="form-group">
+								<input type="hidden" name="from_date" id="from_date"/>
+								<input type="hidden" name="to_date" id="to_date"/>
+								<input class="form-control input-daterange-datepicker" id ="daterange" type="text" name="daterange" placeholder="<%= __('admin.feedback.search_by_date')%>">
+							</div>
+						</div>	
+						<div class="col-md-3 col-xs-12">
+							<button type="button" id="reset" class="btn btn-md waves-effect btn-danger">
+							  <i class="ico ico-left fa fa-refresh"></i>
+							  <%= __("admin.system.reset")%>
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!--- Search End-->
+
+	<!--- Datatable Start-->
+	<div class="col-lg-12 col-md-12">
+		<div class="box-content">
+			<h4 class="box-title"><%= __('admin.reports_statistics.earnings') %></h4>
+			<div class="dropdown js__drop_down">
+				<div class="input-group">
+					<button type="button" class="btn btn-default btn-xs text-black no-border dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<span><%=__("admin.system.export_data")%></span> 
+						<span class="fa fa-caret-down"></span> 
+						<span class="sr-only">Toggle Dropdown</span> 
+					</button>
+					<ul class="dropdown-menu dropdown-menu-right">
+						<li><a href="<%= active_list_url%>/earnings/export_filtered/xlsx"><%=__("admin.system.export_filtered_in_excel")%></a></li>
+						<li><a href="<%= active_list_url%>/earnings/export_all/xlsx"><%=__("admin.system.export_all_in_excel")%></a></li>
+						<li><a href="<%= active_list_url%>/earnings/export_filtered/pdf"><%=__("admin.system.export_filtered_in_pdf")%></a></li>
+						<li><a href="<%= active_list_url%>/earnings/export_all/pdf"><%=__("admin.system.export_all_in_pdf")%></a></li>
+					</ul>
+				</div>
+			</div>
+			<table id="data-table" class="table table-striped table-bordered display" style="width:100%">
+				<thead>
+					<tr>
+						<th><%= __('admin.order._id')%></th>
+						<th><%= __('admin.order.quantity')%></th>
+						<th><%= __('admin.order.total_price')%></th>
+						<th><%= __('admin.order.seller_name')%></th>
+						<th><%= __('admin.order.buyer_name')%></th>
+						<th><%= __('admin.order.product_title')%></th>
+						<th><%=__('admin.system.status')%></th>
+						<th><%=__('admin.system.created')%></th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</div>
+	<!--- Datatable End-->
+</div>
+
+<!-- DateRangepicker -->
+<link rel="stylesheet" href="<%=WEBSITE_CSS_FILE_PATH%>plugin/daterangepicker/daterangepicker.css">
+
+<script src="<%=WEBSITE_JS_FILE_PATH%>scripts/jquery-3.0.0.js"></script>
+<script>
+	var dataTable 	= "";
+	let recordsTotal = 0;
+	let monthYearWiseData = {};
+
+	/** Set Data table */
+	$(document).ready(()=>{
+		dataTable = $('#data-table').DataTable({
+			"bStateSave"	: true,
+			"fnStateSave"	: function (oSettings, oData) {
+				localStorage.setItem( 'DataTables', JSON.stringify(oData) );
+			},
+			"fnStateLoad"	: function (oSettings) {
+				return JSON.parse( localStorage.getItem('DataTables') );
+			},
+			"dom"		: 'ltrip',
+            "serverSide": true,
+            "scrollX"	: true,
+            "sorting"	: [[7,"desc"]],
+            "lengthMenu": PAGE_LENGTH_MENU,
+            "processing": true,
+			"columns": [
+				{
+					"data" : {},
+					"orderable" : false,
+					"name": "order_id",
+					"render": (result=>{
+						return '<a class="view_order_links" target="_blank" href="<%=WEBSITE_ADMIN_URL%>earnings/view/'+result.order_id+'">'+result.order_id+ '</a>';
+					})
+				},
+				{"data" : 'quantity'},
+				{"data" : 'grand_total'},
+				{
+					"data" : {},
+					"orderable" : false,
+					"name": "seller_name",
+					"render" : (result=>{
+						let linkTag='<a href="<%=WEBSITE_ADMIN_URL%>users/view/'+result.seller_details._id+'" class="view_order_links" target="_blank">'+(result.seller_details.full_name ? result.seller_details.full_name : '')+'</a>'
+						return linkTag;
+					})
+				},
+				// {"data" : 'buyer_details.full_name'},
+				{
+					"data" : {},
+					"orderable" : false,
+					"name": "seller_name",
+					"render" : (result=>{
+						let linkTag='<a href="<%=WEBSITE_ADMIN_URL%>users/view/'+result.buyer_details._id+'" class="view_order_links" target="_blank">'+(result.buyer_details.full_name ? result.buyer_details.full_name : '')+'</a>'
+						return linkTag;
+					})
+				},
+				{
+					"data" : {},
+					"orderable" : false,
+					"name": "product_title",
+					"render" : (result=>{
+						let linkTag='<a href="<%=WEBSITE_ADMIN_URL%>products/view/'+result.product_details._id+'" class="view_order_links" target="_blank">'+(result.product_details.product_title ? result.product_details.product_title:'')+'</a>'
+						return linkTag;
+					})
+				},
+				{
+					data: 'order_status',
+					"orderable" : false,
+					render:  (order_status=> {
+						let labelClas="",labelText="";
+						if(order_status=="<%=API_ORDER_REQUESTED%>"){ labelClass="bg-dark"; labelText="Requested"; }
+						else if(order_status=="<%=API_ORDER_ACCEPTED%>"){ labelClass="bg-warning"; labelText="Accepted"; }
+						else if(order_status=="<%=API_ORDER_REJECTED%>"){ labelClass="bg-danger"; labelText="Rejected"; }
+						else if(order_status=="<%=API_ORDER_DISPATCHED%>"){ labelClass="bg-info2"; labelText="Dispatched"; }
+						else if(order_status=="<%=API_ORDER_SHIPPED%>"){ labelClass="bg-info"; labelText="Shipped"; }
+						else if(order_status=="<%=API_ORDER_DELIVERED%>"){ labelClass="bg-success"; labelText="Dilivered"; }
+						else if(order_status=="<%=API_ORDER_RETURN_REQ%>"){ labelClass="bg-danger"; labelText="Requested To Return"; }
+						else if(order_status=="<%=API_ORDER_RETURNED%>"){ labelClass="bg-danger"; labelText="Returned"; }
+						else if(order_status=="<%=API_ORDER_CANCELED%>"){ labelClass="bg-danger"; labelText="Cancelled"; }
+						else if(order_status=="<%=API_ORDER_RATED%>"){ labelClass="bg-success"; labelText="Rated"; }
+						else if(order_status=="<%=API_ORDER_RETURN_REQ_ACCEPT%>"){ labelClass="bg-warning"; labelText="Return Request Accepted"; }
+						else if(order_status=="<%=API_ORDER_RETURN_REQ_REJECT%>"){ labelClass="bg-danger"; labelText="Return Request Rejected"; }
+						return ('<span class="notice text-white ' +labelClass +'">' +labelText +"</span>");
+					})
+				},	
+				{
+					"data" : 'created',
+					render : (created=>{
+						return moment(created).format(DEFAULT_DATE_TIME_FORMAT);
+					})
+				},  
+            ],
+            "ajax": {
+				"type" 	    : "POST",
+				"url"		: "<%= active_list_url%>/earnings",
+				"data"      : (d=>{
+					d.fromDate  = $("#from_date").val();
+					d.toDate  	= $("#to_date").val();
+				}),
+				"dataSrc"	: (res=>{
+					return res.data;
+				})
+			}	
+			
+		});	
+	});
+
+	/** Function to search in data table */
+	searchDatatable = (columnNumber=>{
+		var data = $('#column_number_'+columnNumber).val();
+		dataTable.search(data,columnNumber).draw();
+	});
+
+	/** Function to searching in data table by date range*/
+	$(function() {
+		$('input[name="daterange"]').daterangepicker({
+			opens: 'right'
+		}, function(start, end, label) {
+			$("#from_date").val(start);
+			$("#to_date").val(end);
+			$('input[name="daterange"]').val(start.format('MM/DD/YYYY') + ' - ' + end.format('MM/DD/YYYY'));
+			dataTable.draw();
+		});
+	});
+</script>
+<script src="<%=WEBSITE_JS_FILE_PATH%>datatable_state_storage.js"></script>

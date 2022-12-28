@@ -1,0 +1,123 @@
+<% var result	=	(typeof result != typeof undefined && result) ? result	:[];%>
+<div class="row small-spacing" >
+	<div class="col-md-12 col-xs-12">
+		<div class="box-content">
+			<h4 class="box-title"><%= __('admin.system.view')%></h4>
+			<div class="dropdown js__drop_down">
+				<a href="<%= active_list_url%>">
+					<button type="button" class="btn btn-sm btn-violet">
+						<i class="ico ico-left fa fa-step-backward"></i><%= __('admin.system.back')%>
+					</button>
+				</a>
+			</div>
+			<hr>
+			<div class="card-content">
+				<div class="col-xs-12">
+					<div class="box-content">
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="table-responsive"> 
+									<table class="table table-bordered">
+										<tbody>
+											<tr> 
+												<th>
+													<%= __('admin.review.product')%>
+												</th> 
+												<td>
+													<table class="table table-bordered">
+														<thead>
+															<tr>
+																<th>Name</th>
+																<th>Image</th>
+															</tr>
+															<tr>
+																<td><%= result.productDetails.product_title%></td>
+																<td>
+																	<img class="review_view_image" src="<%= result.productDetails.image_path+result.productDetails.image%>" alt="">
+																</td>
+															</tr>
+														</thead>
+													</table>
+												</td>
+											</tr>
+											<tr> 
+												<th>
+													<%= __('admin.review.seller')%>
+												</th> 
+												<td>
+													<table class="table table-bordered">
+														<thead>
+															<tr>
+																<th>Name</th>
+																<th>Image</th>
+																<th>E-mail</th>
+															</tr>
+															<tr>
+																<td><%= result.sellerDetails.full_name%></td>
+																<td>
+																	<img class="review_view_image" src="<%= result.sellerDetails.image_path+result.sellerDetails.image%>" alt="">
+																</td>
+																<td><%= result.sellerDetails.email%></td>
+															</tr>
+														</thead>
+													</table>
+												</td>
+											</tr>
+											
+											<tr> 
+												<th>
+													<%= __('admin.review.buyer')%>
+												</th> 
+												<td>
+													<table class="table table-bordered">
+														<thead>
+															<tr>
+																<th>Name</th>
+																<th>Image</th>
+																<th>E-mail</th>
+															</tr>
+															<tr>
+																<td><%= result.buyerDetails.full_name%></td>
+																<td>
+																	<img class="review_view_image" src="<%= result.buyerDetails.image_path+result.buyerDetails.image%>" alt="">
+																</td>
+																<td><%= result.buyerDetails.email%></td>
+															</tr>
+														</thead>
+													</table>
+												</td>
+											</tr>
+											<tr>
+												<th>
+													<%= __('admin.review.rating')%>
+												</th> 
+												<td>
+													<table class="table table-bordered">
+														<thead>
+															<tr>
+																<th>Rating</th>
+																<th>Rating Title</th>
+																<th>Rating Description</th>
+															</tr>
+															<tr>
+																<td><%= result.rating%></td>
+																<td><%= result.review_title%></td>
+																<td><%= result.review_description%></td>
+															</tr>
+														</thead>
+													</table>
+												</td>
+											</tr>
+										</tbody> 
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- /.box-content -->
+				</div>
+				<!-- /.col-xs-12 -->
+			</div>
+		</div>
+	</div>
+</div>

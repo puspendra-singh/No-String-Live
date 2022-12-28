@@ -1,0 +1,177 @@
+
+<div class="row small-spacing" >
+	<div class="col-md-12 col-xs-12">
+		<div class="box-content">
+			<h4 class="box-title">Add <%=key.charAt(0).toUpperCase()+key.substr(1)%></h4>
+			<div class="dropdown js__drop_down">
+				<a href="/admin/masters/<%=key%>">
+					<button type="button" class="btn btn-sm btn-violet">
+						<i class="ico ico-left fa fa-step-backward"></i>Back
+					</button>
+				</a>
+			</div>
+			<hr>
+			<div class="card-content">
+				<form id="add-master" method="post" name="addMaster" data-submit-btn-id="add-btn-master">
+
+					<!-- <%	if(key == 'category'){	%>
+					<div class="form-group">
+						<label for="country_code"><%= __('admin.user.id')%> <span class="error">*</span></label>
+						<input type="text" name="country_code" class="form-control" id="country_code">
+						<span class="error" id="country_code_error"></span>
+					</div>
+				<% 	} 	%> -->
+
+					<% 
+					if(key == 'city'){
+						%>
+						
+					
+						<div class="form-group">
+							<label for="country"><%= __('admin.user.country')%>
+								<span class="required"> *</span>
+							</label>
+							<select class="form-control select2_1" name="country" id="country">
+								<option value="">Select Country</option>
+								<%- country_list%>
+							</select>
+							<span class="error" id="country_error"></span>
+						</div>
+
+						<div class="form-group">
+							<label for="state"><%= __('admin.user.state')%>
+								<span class="required"> *</span>
+							</label>
+							<select class="form-control" name="state" id="state" class="state">
+								<option value="">Select state</option>
+							</select>
+							<span class="error" id="state_error"></span>
+						</div>
+	
+						
+					<% 
+				} 
+				%>
+				<% 
+					if( key == 'state'){
+						%>
+						<div class="form-group">
+							<label for="country"><%= __('admin.user.country')%>
+								<span class="required"> *</span>
+							</label>
+							<select class="form-control select2_1" name="country" id="country">
+								<option value="">Select Country</option>
+								<%- country_list%>
+							</select>
+							<span class="error" id="country_error"></span>
+						</div>
+					<% 
+				} 
+				%>
+					<div class="form-group">
+						<label for="name"><%= __('admin.system.name')%> <span class="error">*</span></label>
+						<input type="text" name="name" class="form-control" id="name">
+						<span class="error" id="name_error"></span>
+					</div>
+					<% 
+					if(key == 'country'){
+						%>
+						<div class="form-group">
+							<label for="country_code"><%= __('admin.user.country_code')%> <span class="error">*</span></label>
+							<input type="text" name="country_code" class="form-control" id="country_code">
+							<span class="error" id="country_code_error"></span>
+						</div>
+					<% 
+				} 
+				%>
+
+
+				<% 
+					if(key == 'brandlist'){
+						%>
+						<div class="form-group">
+							<label for="country_code"><%= __('admin.product.brandlist_image')%> <span class="error">*</span></label>
+							<input type="file" oninput="getPreview(this,'file_preview')" name="brand_image" class="form-control" id="brand_image">
+							<span class="error" id="brand_image_error"></span>
+							<img src="" style="height: 100px; margin-top: 15px; display: none;" id="file_preview" alt="">
+						</div>
+					<% 
+				} 
+				%>
+
+
+				<% 
+					if(key == 'doc_preview'){
+						%>
+						<div class="form-group">
+							<label for="country_code"><%= __('admin.user.id_document_image')%> <span class="error">*</span></label>
+							<input type="file" oninput="getPreview(this,'file_previewdocument')" name="id_document_image" class="form-control" id="id_document_image">
+							<span class="error" id="id_document_image_error"></span>
+							<img src="" style="height: 100px; margin-top: 15px; display: none;" id="file_previewdocument" alt="">
+						</div>
+					<% 
+				} 
+				%>
+				
+					<button type="button" id="add-btn-master" class="btn btn-success btn-sm btn-submit"><i class="ico ico-left fa fa-save"></i><%= __('admin.system.submit')%><span></span></button>
+					<a href="/admin/masters/<%=key%>" type="button" class="btn btn-danger btn-sm"><i class="ico ico-left fa fa-remove"></i><%= __('admin.system.cancel')%></a>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="<%=WEBSITE_JS_FILE_PATH%>scripts/jquery-3.0.0.js"></script>
+<!-- Select2 -->
+<link rel="stylesheet" href="<%= WEBSITE_JS_FILE_PATH%>plugin/select2/css/select2.min.css">
+<script src="<%= WEBSITE_JS_FILE_PATH%>plugin/select2/js/select2.min.js"></script>
+<script>
+	$('.btn-submit').click(function(){
+		var btnId	=	$(this).attr("id");
+		startTextLoading(btnId)
+		ajax_submit("add-master", function(status,response){
+			if(status){
+				window.location.href	=	response.rediect_url;
+			}else{
+				stopTextLoading(btnId)
+			}
+		});
+	});
+
+	/** Get States */
+  $(document).ready(function () {
+    $("#country").on("change", function (e) {
+      // var countryId = $("#country").find(":selected").val();
+      // var stateId = e.target.value;
+			var countryId = e.target.value;
+      getMastersStatesList(countryId);
+    });
+  });
+
+	$(document).ready(function(){
+    $("#state").select2( {
+    placeholder: "Select State",
+    allowClear: true
+    } );
+
+  })
+
+  function getPreview(fileInput,previewId){
+	const previewElement = document.getElementById(previewId);
+	getBase64(fileInput.files[0]).then((data)=>{
+		previewElement.src=data;
+		previewElement.style.display="block";
+	})
+
+  }
+  function getBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+  }
+</script>
+
+

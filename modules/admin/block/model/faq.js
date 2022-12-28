@@ -1,0 +1,265 @@
+const async = require("async");
+function Faq() {
+
+  /** Function to get list **/
+  this.list = (req, res, next) => {
+    if (isPost(req)) {
+      let limit = req.body.length   ? parseInt(req.body.length) : DEFAULT_LIMIT;
+      let skip  = req.body.start    ? parseInt(req.body.start)  : DEFAULT_SKIP;
+      let draw  = req.body.draw     ? parseInt(req.body.draw)   : DEFAULT_SKIP;
+
+      let commonCondition = { is_deleted: NOT_DELETED };
+      dataTableConfig(req,res,null,function(configDataTable){
+        configDataTable.search_condition = Object.assign(configDataTable.search_condition,commonCondition );
+        const collection = db.collection("faqs");
+        async.parallel(
+          {
+            list: (callback) => {
+              collection.find(configDataTable.search_condition, {}).skip(skip).limit(limit).sort(configDataTable.sort_condition).toArray((errUser, resultUser) => {
+                  callback(errUser, resultUser);
+                });
+            },
+            recordsTotol: (callback) => {
+              collection.countDocuments(commonCondition, {}, (err, result) => {
+                callback(err, result);
+              });
+            },
+            recordsfiltered: (callback) => {
+              collection.countDocuments(configDataTable.search_condition,{},(err, result) => {
+                  callback(err, result);
+                }
+              );
+            },
+          },
+          (err, response) => {
+            /** Send error message */
+            if (err) return next(err);
+
+            res.send({
+              status          : STATUS_SUCCESS,
+              draw            : draw,
+              data            : response.list ? response.list : [],
+              recordsTotal    : response.recordsTotol ? response.recordsTotol : 0,
+              recordsFiltered : response.recordsfiltered ? response.recordsfiltered : 0,
+            });
+          }
+        );
+      });
+    } else {
+      req.breadcrumbs(BREADCRUMBS["admin/faq/list"]);
+      res.render("list", {
+        breadcrumbs: req.breadcrumbs(),
+      });
+    }
+  }; //End List
+
+  /** Function is used to add block */
+  this.add = async (req, res, next) => {
+    if (isPost(req)) {
+      req.body  = sanitizeData(req.body, NOT_ALLOWED_TAGS);
+      req.checkBody({
+        question: {
+          isLength :{
+            options    : {min : MIN_CHARACTER_TITLE_LIMIT, max : MAX_CHARACTER_TITLE_LIMIT},
+            errorMessage:res.__("system.title_limit.this_value_should_contain_minimum_and_maximum_character")
+          },
+          notEmpty: true,
+          errorMessage: res.__("admin.faq.please_enter_question"),
+        },
+        answer: {
+          isLength :{
+            options    : {min : MIN_CHARACTER_DESCRIPTION_LIMIT, max : MAX_CHARACTER_DESCRIPTION_LIMIT},
+            errorMessage:res.__("system.description_limit.this_value_should_contain_minimum_and_maximum_character")
+          },
+          notEmpty: true,
+          errorMessage: res.__("admin.faq.please_enter_answer"),
+        },
+      });
+
+      var errors = uniqueValidations(req.validationErrors());
+      if (!errors) {
+        let question      = req.body.question        ? req.body.question : "";
+        let answer        = req.body.answer    ? req.body.answer : "";
+
+        const faqs = db.collection("faqs");
+        faqs.insertOne(
+          {
+            question    : question,
+            answer      : answer,
+            is_active   : ACTIVE,
+            is_deleted  : NOT_DELETED,
+            created     : new Date(),
+          },
+          function (err, result) {
+            if (!err) {
+              req.flash( STATUS_SUCCESS,res.__("admin.faq.faq_has_been_created_successfully"));
+              res.send({
+                status: STATUS_SUCCESS,
+                message: '',
+                rediect_url: "/admin/faq",
+              });
+            } else {
+              req.flash(STATUS_ERROR,res.__("admin.system.something_went_wrong"));
+              res.send({
+                status: STATUS_ERROR,
+                message: '',
+                rediect_url: "/faq",
+              });
+            }
+          }
+        );
+      } else {
+        res.send({
+          status: STATUS_ERROR,
+          message: errors,
+          rediect_url: "/faq",
+        });
+      }
+    } else {
+      req.breadcrumbs(BREADCRUMBS["admin/faq/add"]);
+      res.render("add");
+    }
+  }; //End add
+
+  /** Function to edit detail **/
+  this.edit = function (req, res) {
+    let faqId = req.params.id ? req.params.id : "";
+    if (isPost(req)) {
+      req.body  = sanitizeData(req.body, NOT_ALLOWED_TAGS);
+      req.checkBody({
+        page_name: {
+          isLength :{
+            options    : {min : MIN_CHARACTER_NAME_LIMIT, max : MAX_CHARACTER_NAME_LIMIT},
+            errorMessage:res.__("system.name_limit.this_value_should_contain_minimum_and_maximum_character")
+          },
+          notEmpty: true,
+          errorMessage: res.__("admin.block.please_enter_page_name"),
+        },
+        name: {
+          isLength :{
+            options    : {min : MIN_CHARACTER_TITLE_LIMIT, max : MAX_CHARACTER_TITLE_LIMIT},
+            errorMessage:res.__("system.title_limit.this_value_should_contain_minimum_and_maximum_character")
+          },
+          notEmpty: true,
+          errorMessage: res.__("admin.block.please_enter_name"),
+        },
+        description: {
+          isLength :{
+            options    : {min : MIN_CHARACTER_DESCRIPTION_LIMIT, max : MAX_CHARACTER_DESCRIPTION_LIMIT},
+            errorMessage:res.__("system.description_limit.this_value_should_contain_minimum_and_maximum_character")
+          },
+          notEmpty: true,
+          errorMessage: res.__("admin.block.please_enter_description"),
+        },
+      });
+      
+      let name        = req.body.name         ? req.body.name : "";
+      let title       = req.body.title        ? req.body.title : "";
+      let pageName    = req.body.page_name    ? req.body.page_name : "";
+      let description = req.body.description  ? req.body.description : "";
+      var errors = uniqueValidations(req.validationErrors());
+      if (!errors) {
+        const collection = db.collection("faqs");
+        collection.updateOne(
+          { _id: ObjectId(faqId) },
+          { $set: { name: name, title : title, description : description ,page_name   : pageName, modified: new Date() } },
+          function (err, result) {
+            if (!err) {
+              
+              req.flash(
+                STATUS_SUCCESS,
+                res.__("admin.faq.faq_has_been_updated_successfully")
+              );
+              res.send({
+                status: STATUS_SUCCESS,
+                message: '',
+                rediect_url: "/admin/faq",
+              });
+            } else {
+              req.flash(
+                STATUS_ERROR,
+                res.__("admin.system.something_went_wrong")
+              );
+              res.send({
+                status: STATUS_ERROR,
+                message: '',
+                rediect_url: "/faq",
+              });
+            }
+          }
+        );
+      } else {
+        res.send({
+          status: STATUS_ERROR,
+          message: errors,
+          rediect_url: "/faq",
+        });
+      }
+    } else {
+      var collection = db.collection("faqs");
+      collection.findOne({ _id: ObjectId(faqId) }, function (err, result) {
+        if (!err) {
+          req.breadcrumbs(BREADCRUMBS["admin/faq/edit"]);
+          res.render("edit", {
+            result: result ? result : {},
+            message: "",
+          });
+        } else {
+          req.flash(STATUS_ERROR, res.__("admin.system.something_went_wrong"));
+          res.redirect(WEBSITE_ADMIN_URL + "faq");
+        }
+      });
+    }
+  }; //End editDetail
+
+  /** Function to delete detail **/
+  this.deleteDetail   =  (req, res)=>{
+    var faqId       = req.params.id ? req.params.id : "";
+    const collection  = db.collection("faqs");
+    collection.updateOne(
+      { _id: ObjectId(faqId) },
+      { $set: { is_deleted: DELETED, modified: new Date() } },
+      function (err, result) {
+        if (!err) {
+          req.flash(
+            STATUS_SUCCESS,
+            res.__("admin.faq.faq_has_been_deleted_successfully")
+          );
+          res.redirect(WEBSITE_ADMIN_URL + "faq");
+        } else {
+          req.flash(STATUS_ERROR, res.__("admin.system.something_went_wrong"));
+          res.redirect(WEBSITE_ADMIN_URL + "faq");
+        }
+      }
+    );
+  }; //End deleteDetail
+
+  /** Function to update status **/
+  this.updateStatus =  (req, res)=> {
+    var faqId = req.params.id ? req.params.id : "";
+    var status = req.params.status == ACTIVE ? INACTIVE : ACTIVE;
+    const collection = db.collection("faqs");
+    collection.updateOne(
+      { _id: ObjectId(faqId) },
+      {
+        $set: {
+          is_active: status,
+          modified: new Date(),
+        },
+      },
+      function (err, result) {
+        if (!err) {
+          req.flash(
+            STATUS_SUCCESS,
+            res.__("admin.faq.status_has_been_updated_successfully")
+          );
+          res.redirect(WEBSITE_ADMIN_URL + "faq");
+        } else {
+          req.flash(STATUS_ERROR, res.__("admin.system.something_went_wrong"));
+          res.redirect(WEBSITE_ADMIN_URL + "faq");
+        }
+      }
+    );
+  }; //End updateStatus
+}
+module.exports = new Faq();

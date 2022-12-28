@@ -1,0 +1,185 @@
+<div class="row small-spacing">
+  <div class="col-lg-12 col-md-12 col-xs-12">
+    <div class="box-content card bordered-all primary js__card">
+      <h4 class="box-title bg-primary with-control">
+        Search
+        <span class="controls">
+          <button type="button" class="control fa fa-minus js__card_minus"></button>
+        </span>
+      </h4>
+      <div class="card-content js__card_content">
+        <form id="searchForm" name="searchForm" >
+          <div class="row">
+            <div class="col-md-3 col-xs-12">
+              <div class="form-group">
+                <input type="text" class="form-control" name="name" onkeyUp="searchDatatable(1)" id="column_number_1"
+                  placeholder="<%= __('admin.testimonials.search_by_name')%>" />
+              </div>
+            </div>
+            <div class="col-md-3 col-xs-12">
+							<div class="form-group">
+								<select class="form-control" name="status" id="search_by_status" class="search_by_status">
+									<option value=""><%= __('admin.search.search_by_status')%></option>
+									<%
+										if(typeof USER_STATUS_SEARCH_DROPDOWN!== typeof undefined && USER_STATUS_SEARCH_DROPDOWN.length > 0){
+											USER_STATUS_SEARCH_DROPDOWN.map(searchStatus=>{
+												var selectedFlag    = (typeof searchStatus.status_type !== typeof undefined && searchStatus.status_type  && searchStatus.status_type == statusType) ? "selected" : "";
+												%>
+												<option value="<%=searchStatus.status_id%>"  <%=selectedFlag%>><%=searchStatus.status_name%></option>    
+											<%      
+											});
+										} %>
+								</select>
+							</div>
+						</div>
+            <div class="col-md-3 col-xs-12">
+              <button type="button" id="reset" class="btn btn-md waves-effect btn-danger">
+              <i class="ico ico-left fa fa-refresh"></i>
+              <%= __("admin.system.reset")%>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-12">
+    <div class="box-content">
+      <h4 class="box-title"><%=__('admin.testimonials.testimonial')%></h4>
+      <div class="dropdown js__drop_down">
+        <div class="col-xs-6 text-right">
+          <a href="/admin/testimonials/add">
+            <button type="button" class="btn btn-sm btn-primary">
+              <i class="ico ico-left fa fa-plus"></i><%=
+              __('admin.system.add')%>
+            </button>
+          </a>
+        </div>
+        <div class="col-xs-6 text-left"></div>
+      </div>
+
+      <table id="data-table" class="table table-striped table-bordered display" style="width: 100%;">
+        <thead>
+          <tr>
+            <th><%=__('admin.system.image')%></th>
+            <th><%= __('admin.system.name')%></th>
+            <th><%= __('admin.testimonials.about')%></th>
+            <th><%=__('admin.system.status')%></th>
+            <th><%=__('admin.system.created')%></th>
+            <th><%=__('admin.system.action')%></th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </div>
+</div>
+<script src="<%=WEBSITE_JS_FILE_PATH%>scripts/jquery-3.0.0.js"></script>
+<script>
+  var dataTable = "";
+  $(document).ready(function () {
+    dataTable = $("#data-table").DataTable({
+      "bStateSave"	: true,
+			"fnStateSave"	: function (oSettings, oData) {
+				localStorage.setItem( 'DataTables', JSON.stringify(oData) );
+			},
+			"fnStateLoad"	: function (oSettings) {
+				return JSON.parse( localStorage.getItem('DataTables') );
+			},
+      dom: "ltrip",
+      serverSide: true,
+      scrollX: true,
+      sorting: [[4, "desc"]],
+      lengthMenu: PAGE_LENGTH_MENU,
+      processing: true,
+      columns: [
+        {
+          data: {},
+          orderable: false,
+          render: function (result) {
+            var imageUrl = '<img class="image_view" src="' + result.full_image_path + '"/>'
+            return imageUrl;
+          },
+        },
+        { 
+          data: "name" ,
+          orderable: false,
+        },
+        {
+          data: "about",
+          orderable: false,
+          render: function (about) {
+            return (about) ? about : 'N/A';
+          },
+        },
+        {
+          data: 'is_active',
+          orderable: false,
+          render: function (is_active) {
+            var labelClass = is_active == "<%=ACTIVE%>" ? "bg-success" : "bg-warning";
+            var labelText = is_active == "<%=ACTIVE%>" ? "Active" : "Inactive";
+            return ('<span class="notice text-white ' + labelClass + '">' + labelText + "</span>");
+          },
+        },
+        {
+          data: "created",
+          render: function (created) {
+            return moment(created).format(DEFAULT_DATE_TIME_FORMAT);
+          },
+        },
+        {
+          data: {},
+          orderable: false,
+          render: function (result) {
+            var id = result._id ? result._id : "";
+            var status = result.is_active ? result.is_active : "<%=DEACTIVE%>";
+            var statusText =
+              result.is_active && result.is_active == "<%=ACTIVE%>"
+                ? '<%=__("admin.system.deactivate")%>'
+                : '<%=__("admin.system.activate")%>';
+            var html =
+              '<div class="input-group">' +
+              '<button type="button" class="btn btn-default btn-xs text-black no-border dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span><%=__("admin.system.action")%></span> <span class="fa fa-caret-down"></span> <span class="sr-only">Toggle Dropdown</span> </button>' +
+              '<ul class="dropdown-menu dropdown-menu-right">' +
+              '<li><a href="<%=active_list_url%>/edit/' +
+              id +
+              '"><%=__("admin.system.edit")%></a></li>' +
+              '<li><a class="confirm_box" href="javascript:void(0)" data-href="<%=active_list_url%>/update_status/' +
+              id +
+              "/" +
+              status +
+              '" data-confirm-heading="<%=__("admin.system.are_you_sure")%>" data-confirm-message="<%=__("admin.system.you_want_to_change_status")%>" >' +
+              statusText +
+              "</a></li>" +
+              '<li role="separator" class="divider"></li>' +
+              '<li><a class="confirm_box" href="javascript:void(0)" data-href="<%=active_list_url%>/delete/' +
+              id +
+              '" data-confirm-heading="<%=__("admin.system.are_you_sure")%>" data-confirm-message="<%=__("admin.slider.you_want_to_delete_this_slider")%>"><%=__("admin.system.delete")%></a></li>' +
+              "</ul>" +
+              "</div>";
+            return html;
+          },
+        },
+      ],
+      ajax: {
+        type: "POST",
+        url: "<%= active_list_url%>",
+        dataSrc: function (res) {
+          
+          return res.data;
+        },
+        "data"      : (d=>{
+					d.statusSearch =  $("#search_by_status").val();
+				}),
+      },
+    });
+    $(document).on("change","#search_by_status",function(){
+			dataTable.draw();
+		});
+  });
+  /** Function to search in data table */
+  function searchDatatable(columnNumber) {
+    var data = $("#column_number_" + columnNumber).val();
+    dataTable.search(data, columnNumber).draw();
+  }
+</script>
+<script src="<%=WEBSITE_JS_FILE_PATH%>datatable_state_storage.js"></script>

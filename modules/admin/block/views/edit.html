@@ -1,0 +1,89 @@
+<div class="row small-spacing">
+  <div class="col-md-12 col-xs-12">
+    <div class="box-content">
+      <h4 class="box-title"><%=__('admin.system.edit')%></h4>
+      <div class="dropdown js__drop_down">
+        <a href="<%= active_list_url%>">
+          <button type="button" class="btn btn-sm btn-violet">
+            <i class="ico ico-left fa fa-step-backward"></i><%=__('admin.system.back')%>
+          </button>
+        </a>
+      </div>
+      <hr />
+      <div class="card-content">
+        <form id="edit-block" method="post" name="edit-block" class="on_click_submit" data-submit-btn-id="edit-btn-block">
+            <div class="row">
+                <div class="col-md-12 col-xs-12">
+                  <div class="form-group">
+                    <label for="page_name"><%= __('admin.block.page_name')%> <span class="required">*</span></label>
+                    <input 
+                      type="text" 
+                      class="form-control" 
+                      name="page_name" 
+                      id="page_name"
+                      value="<%= (result.page_name) ? result.page_name : ''%>" 
+                    />
+                    <span class="error" id="page_name_error"></span>
+                  </div>
+                </div>
+              </div>
+          <div class="row">
+            <div class="col-md-12 col-xs-12">
+              <div class="form-group">
+                <label for="name"><%= __('admin.system.name')%> <span class="required">*</span></label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  name="name" 
+                  id="name"
+                  value="<%= (result.name) ? result.name : ''%>" 
+                />
+                <span class="error" id="name_error"></span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 col-xs-12">
+              <div class="form-group">
+                <label for="title"><%= __('admin.system.title')%></label>
+                <input type="text" class="form-control" name="title" id="title" value="<%= (result.title) ? result.title : ''%>"/>
+                <span class="error" id="title_error"></span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 col-xs-12">
+              <div class="form-group">
+                <label for="description"><%= __('admin.system.description')%> <span class="required">*</span></label>
+                <textarea class="form-control ckeditor" name="description" id="description"><%= (result.description) ? result.description : ''%> </textarea>
+                <span class="error" id="description_error"></span>
+              </div>
+            </div>
+          </div>
+          <button type="button" id="edit-btn-block"
+            class="btn btn-success btn-sm btn-submit"><i class="ico ico-left fa fa-save"></i><%= __('admin.system.submit')%></button>
+          <a href="<%= active_list_url%>" type="button"
+            class="btn btn-danger btn-sm"><i class="ico ico-left fa fa-remove"></i><%= __('admin.system.cancel')%></a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script type='text/javascript' src="<%=WEBSITE_JS_FILE_PATH%>scripts/jquery.min.js"></script>
+<script type='text/javascript' src="<%=WEBSITE_JS_FILE_PATH%>plugin/ckeditor/ckeditor.js"></script>
+<script type='text/javascript'>
+
+  /** Submit block detail*/
+  $(".btn-submit").click(function () {
+    updateCkeditorValue();
+    var btnId = $(this).attr("id");
+    startTextLoading(btnId);
+    ajax_submit("edit-block", function (status, response) {
+      if (status) {
+        window.location.href = response.rediect_url;
+      } else {
+        stopTextLoading(btnId);
+      }
+    });
+  });
+</script>

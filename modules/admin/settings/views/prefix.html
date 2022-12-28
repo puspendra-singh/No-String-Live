@@ -1,0 +1,119 @@
+
+<div class="row small-spacing">
+	<div class="col-md-12 col-xs-12">
+	  <div class="box-content">
+		<h4 class="box-title"><%= displayType+' '+__('admin.setting.settings'); %></h4>
+		<div class="dropdown js__drop_down">
+		  <a href="<%= active_list_url%>">
+			<button type="button" class="btn btn-sm btn-violet">
+			  <i class="ico ico-left fa fa-step-backward"></i
+			  ><%=__('admin.system.back')%>
+			</button>
+		  </a>
+		</div>
+		<hr />
+		<div class="card-content">
+			<%
+				var result			=	(typeof result !== typeof undefined && result)		?	result					:{};
+				var title 			= 	(typeof result.title !== typeof undefined)			? 	result.title			:'';
+				var value 			= 	(typeof result.value !== typeof undefined)	   		? 	result.value			:'';
+				var keyValue 		= 	(typeof result.key_value !== typeof undefined)	   	? 	result.key_value		:'';
+				var inputType 		= 	(typeof result.input_type !== typeof undefined)	   	? 	result.input_type		:'';
+				var required 		= 	(typeof result.required !== typeof undefined)		? 	result.required			:'';
+				var editable 		= 	(typeof result.editable !== typeof undefined)		? 	result.editable			:'';
+				var validateType	= 	(typeof result.validate_type !== typeof undefined)	?	result.validate_type	:'';
+				var order 			= 	(typeof result.order_weight !== typeof undefined && result.order_weight)	? 	result.order_weight		:'';
+			%>
+
+			<form id="edit-settings" data-submit-btn-id="settings-edit-btn-id" method="post" class="on_click_submit" role="form">
+				<%
+				if(typeof result != typeof undefined && Array.isArray(result) && result.length > 0){
+					result.forEach(function(records,index){
+						settingId 		= 	(records._id) 			?  	records._id				:'';
+						inputType 		= 	(records.input_type) 	?  	records.input_type		:'';
+						inputValue		= 	(records.value) 		?  	records.value 			:'';
+						title			= 	(records.title) 		?	records.title 			:'';
+						required		= 	(records.required) 		?	records.required		:'';
+						validateType	= 	(records.validate_type) ?	records.validate_type	:'';
+
+						if((inputType && inputType!="") && (title && title!="") && (settingId && settingId!="")){ %>
+							<div class="row clearfix">
+								<div class="col-sm-12">
+									<div class="form-group">
+										<div class="form-line">
+											<label for="settingValue_<%=index%>" class="text-capitalize float-left"> <%= title; %>
+												<% if(required && required == REQUIRED){ %>
+													<span class="required"> *</span>
+												<%}%>
+											</label>
+											<input type="hidden" name="settings[<%=index%>][id]" 		value="<%=settingId%>">
+											<input type="hidden" name="settings[<%=index%>][title]" 	value="<%=title%>">
+											<input type="hidden" name="settings[<%=index%>][required]" 	value="<%=required%>">
+											<input type="hidden" name="settings[<%=index%>][input_type]" value="<%=inputType%>">
+											<input type="hidden" name="settings[<%=index%>][validate_type]" value="<%=validateType%>">
+											<%	if(inputType == "checkbox"){ %>
+													<div class="switch">
+														<label>
+															<input id="settingValue_<%=index%>" name="settings[<%=index%>][value]" value="<%=ACTIVE%>" type="checkbox" <%= (inputValue == ACTIVE) ? "checked" :""; %>>
+															<span class="lever switch-col-green"></span>
+														</label>
+													</div>
+											<%	}else if(inputType == "time"){ %>
+													<input type="text" id="settingValue_<%=index%>" class="form-control time" name="settings[<%=index%>][value]" value="<%= inputValue; %>" placeholder="<%=title %>" readonly='true'/>
+											<%	}else if(inputType == "date"){ %>
+													<input type="text" id="settingValue_<%=index%>" class="form-control date" name="settings[<%=index%>][value]" value="<%= inputValue; %>" placeholder="<%= title %>" readonly='true'/>
+											<%	}else if(inputType == "textarea"){ %>
+													<textarea  id="settingValue_<%=index%>"  name="settings[<%=index%>][value]"  class="form-control no-resize" placeholder="<%= title %>"><%= inputValue; %></textarea>
+											<%	}else{ %>
+													<input type="<%= inputType; %>"  id="settingValue_<%=index%>"  class="form-control" name="settings[<%=index%>][value]" value="<%= inputValue; %>" placeholder="<%=title %>" />
+											<%	} %>
+										</div>
+										 <span id="setting_<%=index%>_value_error" class="error"></span>
+									</div>
+								</div>
+							</div>
+				<%		}
+					});
+				}
+				%>
+				<div class="row clearfix">
+					<div class="col-md-12 col-xs-12">
+						<button type="button" id="settings-edit-btn-id" class="btn btn-success btn-sm btn-submit">
+							<i class="ico ico-left fa fa-save"></i> <%= __('admin.system.submit')%>
+						</button>
+						<a href="<%= active_list_url%>" type="button" class="btn btn-danger btn-sm">
+								<i class="ico ico-left fa fa-remove"></i><%=__('admin.system.cancel')%>
+						</a>
+					</div>
+				</div>
+		  	</form>
+		</div>
+	  </div>
+	</div>
+  </div>
+
+<script src="<%=WEBSITE_JS_FILE_PATH%>scripts/jquery-3.0.0.js"></script>
+
+<!-- Select2 -->
+<link rel="stylesheet" href="<%= WEBSITE_JS_FILE_PATH%>plugin/select2/css/select2.min.css">
+<script src="<%= WEBSITE_JS_FILE_PATH%>plugin/select2/js/select2.min.js"></script>
+
+<script type="text/javascript">
+	/**
+	 * Function to submit form
+	 */
+	$(".btn-submit").click(function(){
+		var btnId = $(this).attr("id");
+		startTextLoading(btnId);
+		ajax_submit("edit-settings",function(status,response){
+			if(status){
+				window.location.href = response.rediect_url;
+			}else{
+				stopTextLoading(btnId);
+			}
+		});
+	});
+</script>
+
+
+

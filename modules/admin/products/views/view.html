@@ -1,0 +1,158 @@
+<% var result	=	(typeof result != typeof undefined && result) ? result	:{};%>
+<div class="row small-spacing" >
+	<div class="col-md-12 col-xs-12">
+		<div class="box-content">
+			<h4 class="box-title"><%= __('admin.system.view')%></h4>
+			<div class="dropdown js__drop_down">
+				<a href="<%= active_list_url%>">
+					<button type="button" class="btn btn-sm btn-violet">
+						<i class="ico ico-left fa fa-step-backward"></i><%= __('admin.system.back')%>
+					</button>
+				</a>
+			</div>
+			<hr>
+			<div class="card-content">
+				<div class="col-xs-12">
+					<div class="box-content">
+						<div class="table-responsive"> 
+							<table class="table table-bordered">
+								<tbody>
+									<tr> 
+										<th scope="row"><%= __('admin.users.image')%></th> 
+										<td>
+											<a href="javascript:void(0)" class="product_img" onclick="initPreview('0','product_img')" data-src="<%=result.resultOne.full_image_path %>">
+												<img class="image_view" src="<%= (result.resultOne.full_image_path)	?	result.resultOne.full_image_path	:''; %>"/>
+											</a>
+										</td>
+									</tr>
+									<tr> 
+										<th scope="row"><%= __('admin.product.product_title')%></th> 
+										<td><%= (result.resultOne.product_title)	?	result.resultOne.product_title	:'N/A';%></td>
+									</tr>
+									<tr> 
+										<th scope="row"><%= __('admin.product.seller_name')%></th> 
+										<td><%= (result.resultOne.user_name)	?	result.resultOne.user_name	:'N/A';%></td>
+									</tr>
+									<tr> 
+										<th scope="row"><%= __('admin.product.category')%></th> 
+										<td><%= (result.resultOne.category_name)	?	result.resultOne.category_name	:'N/A';%></td>
+									</tr>
+									<tr> 
+										<th scope="row"><%= __('admin.product.condition')%></th> 
+										<td><%= (result.resultOne.condition_name)	?	result.resultOne.condition_name	:'N/A';%></td>
+									</tr>
+									<tr> 
+										<th scope="row"><%= __('admin.product.brand')%></th> 
+										<td><%= (result.resultOne.brandlist_name)	?	result.resultOne.brandlist_name	:'N/A';%></td>
+									</tr>
+									<tr> 
+										<th scope="row"><%= __('admin.product.indicative_price')%></th> 
+										<td><%= (result.resultOne.indicative_price)	?	result.resultOne.indicative_price	:'N/A';%></td>
+									</tr>
+									
+									<tr> 
+										<th scope="row"><%= __('admin.product.availability')%></th> 
+										<td><%= (result.resultOne.availability_name)	?	result.resultOne.availability_name	:'N/A';%></td>
+									</tr>
+
+									<tr> 
+										<th scope="row"><%= __('admin.product.quantity')%></th> 
+										<td><%= (result.resultOne.quantity)	?	result.resultOne.quantity	:'N/A';%></td>
+									</tr>
+
+								<tr> 
+										<th scope="row"><%= __('admin.product.shipment_country')%></th> 
+										<% if(result && result.resultTwo[0] && result.resultTwo[0].countryObjects ) { %>
+											<td><% for(let i=0; i < result.resultTwo[0].countryObjects.length; i++) { %>
+												<%= (result.resultTwo[0].countryObjects[i].name)	?	result.resultTwo[0].countryObjects[i].name	:'N/A'; %>
+												<% if(i < (result.resultTwo[0].countryObjects.length-1)){ %>
+													,
+												<% } %>
+												<% } %>
+												<% } %>
+											</td>
+											</tr>
+									<tr> 
+										<th scope="row"><%= __('admin.product.specification')%></th> 
+										<td>
+											<table class="table table-bordered mb-0">
+												<tr>
+													<th>Title</th>
+													<th>Value</th>
+												</tr>
+												<% result.resultOne.specifications.forEach((specification)=>{ %>
+													<tr>
+														<td><%=specification.title%></td>
+														<td><%=specification.value%></td>
+													</tr>
+												<%})%>
+											</table>
+										</td>
+									</tr>
+									<tr>
+										<th><%= __('admin.product.images')%></th>
+										<td>
+											<ul class="product_images">
+												<% result.productImages.forEach((image,index)=>{ %>
+												<li class="product_img cp" onclick="initPreview('<%=index+1%>','product_img')" data-src="<%=image.full_image_path %>">
+													<img src="<%=image.full_image_path %>" alt="">
+												</li>
+												<% }) %>
+											</ul>
+										</td>
+									</tr>
+									<tr> 
+										<th scope="row"><%= __('admin.product.description')%></th> 
+										<td><%= (result.resultOne.description)	?	result.resultOne.description	:'N/A';%></td>
+									</tr>
+									
+									<tr> 
+										<th scope="row"><%= __('admin.system.approval')%></th> 
+										<td>
+											<%
+												var labelClass="",labelText="";
+												if(result.resultOne.is_approved == PRODUCT_ACCEPTED){
+													labelClass = "bg-success";
+													labelText =  "Approved";
+												}else if(result.resultOne.is_approved == PRODUCT_REJCTED){
+													labelClass = "bg-danger";
+													labelText =  "Rejected";
+												}else{
+													labelClass = "bg-warning";
+													labelText =  "Requested";	
+												}
+											%>
+											<span class="notice text-white <%= labelClass%>"><%= labelText%></span>
+											<%if(result.resultOne.is_approved == PRODUCT_REQUESTED){%>
+												<a class="confirm_box" href="javascript:void(0)" data-href="<%=active_list_url%>/product_approval/<%=result.resultOne._id%>/<%=PRODUCT_ACCEPTED%>" data-confirm-heading="<%=__("admin.system.are_you_sure")%>" data-confirm-message="<%=__("admin.system.you_want_to_approve_product")%>" >Accept</a>
+												<a class="confirm_box" href="javascript:void(0)" data-href="<%=active_list_url%>/product_approval/<%=result.resultOne._id%>/<%=PRODUCT_REJCTED%>" data-confirm-heading="<%=__("admin.system.are_you_sure")%>" data-confirm-message="<%=__("admin.system.you_want_to_disapprove_product")%>" >Reject</a>
+											<%}%>
+										</td>
+									</tr>
+									<tr> 
+										<th scope="row"><%= __('admin.system.status')%></th> 
+										<td>
+											<%
+												var labelClass = (result.resultOne.is_active && result.resultOne.is_active == ACTIVE) ? 'bg-success':'bg-warning';
+												var labelText  = (result.resultOne.is_active && result.resultOne.is_active == ACTIVE) ? 'Active':'Inactive';
+											%>
+											<span class="notice text-white <%= labelClass%>"><%= labelText%></span>
+										</td>
+									</tr>
+									<tr> 
+										<th scope="row"><%= __('admin.system.created')%></th> 
+										<td>
+											<span class="setDateTimeFormat" data-time-format="<%= DEFAULT_DATE_TIME_FORMAT %>" data-time="<%= (result.resultOne.created)	?	result.resultOne.created	:new Date(); %>"></span>
+										</td>
+									</tr>
+								</tbody> 
+							</table>
+						</div>
+					</div>
+					<!-- /.box-content -->
+				</div>
+				<!-- /.col-xs-12 -->
+			</div>
+		</div>
+	</div>
+</div>
