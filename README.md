@@ -1,3 +1,2 @@
-# Logitick App
+# No-String-Live
 
-Logitick app
